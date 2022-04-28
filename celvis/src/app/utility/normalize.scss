@@ -1,0 +1,366 @@
+// Reset Styles here (extracted from Celonis website)
+html {
+  font-size: var(--font-size-html);
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+}
+
+body, html {
+  height: 100%
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--default-text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 320px;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block
+}
+
+audio, canvas, progress, video {
+  display: inline-block;
+  vertical-align: initial
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0
+}
+
+[hidden], template {
+  display: none
+}
+
+a {
+  background-color: initial
+}
+
+a:active, a:hover {
+  outline: 0
+}
+
+abbr[title] {
+  border-bottom: 1px dotted
+}
+
+b, strong {
+  font-weight: var(--fw-bold);
+}
+
+dfn {
+  font-style: italic
+}
+
+mark {
+  background: #ff0;
+  color: #000
+}
+
+small {
+  font-size: 80%
+}
+
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: initial
+}
+
+sup {
+  top: -.5em
+}
+
+sub {
+  bottom: -.25em
+}
+
+img {
+  border: 0
+}
+
+svg:not(:root) {
+  overflow: hidden
+}
+
+figure {
+  margin: 1em 40px
+}
+
+hr {
+  box-sizing: initial;
+  height: 0
+}
+
+pre {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch
+}
+
+code, kbd, pre, samp {
+  font-family: monospace, monospace;
+  font-size: 1em
+}
+
+button, input, optgroup, select, textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0
+}
+
+button {
+  overflow: visible
+}
+
+button, select {
+  text-transform: none
+}
+
+button, html input[type=button], input[type=reset], input[type=submit] {
+  -webkit-appearance: button;
+  cursor: pointer
+}
+
+button[disabled], html input[disabled] {
+  cursor: default
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+  border: 0;
+  padding: 0
+}
+
+input {
+  line-height: normal
+}
+
+input[type=checkbox], input[type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+
+input[type=search] {
+  -webkit-appearance: textfield;
+  box-sizing: initial
+}
+
+input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+
+fieldset {
+  border: 1px solid silver;
+  margin: 0 2px;
+  padding: .35em .625em .75em
+}
+
+legend {
+  border: 0;
+  padding: 0
+}
+
+textarea {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch
+}
+
+optgroup {
+  font-weight: var(--fw-bold);
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0
+}
+
+td, th {
+  padding: 0
+}
+
+
+*, :after, :before {
+  box-sizing: border-box;
+}
+
+// Style Focus
+* {
+  &:focus, &:focus-visible {
+    outline: var(--focus-outline);
+    box-shadow: var(--focus-box-shadow);
+  }
+}
+
+.body--improvise-scroll-width {
+  margin-right: 8px
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px
+}
+
+::-webkit-scrollbar-track {
+  background: #ebebeb
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #c6c6c6
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7f7f7f
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit
+}
+
+a {
+  //color: #264aff;
+  color: inherit;
+  text-decoration: none
+}
+
+
+p a {
+  text-decoration: underline
+}
+
+[role=link] {
+  cursor: pointer
+}
+
+figure {
+  margin: 0
+}
+
+img {
+  vertical-align: middle
+}
+
+hr {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border: 0;
+  border-top: 1px solid #c6c6c6
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0
+}
+
+.sr-only-focusable:active, .sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto
+}
+
+code, pre {
+  display: inline;
+  background-color: #ebebeb;
+  border-radius: 3px
+}
+
+.table {
+  text-align: left
+}
+
+.table td, .table th {
+  border: 1px solid #c6c6c6;
+  padding: 8px
+}
+
+
+.fw-light, .fw-medium, .fw-regular, .light, .medium, .regular {
+  font-weight: var(--fw-default) !important
+}
+
+.bold, .extra-bold, .fw-black, .fw-bold, .fw-extra-bold, .fw-semi-bold, .semi-bold {
+  font-weight: var(--fw-bold) !important
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  margin-top: 16px;
+  margin-bottom: 8px
+}
+
+.h1:first-child, .h2:first-child, .h3:first-child, .h4:first-child, .h5:first-child, .h6:first-child, h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+  margin-top: 0
+}
+
+.h1, h1 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-h1)
+}
+
+.h1, .h2, h1, h2 {
+  font-weight: var(--fw-bold);
+}
+
+.h2, h2 {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
+}
+
+.h3, h3 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--fw-default);
+  line-height: var(--line-height-h3);
+}
+
+.h4, h4 {
+  font-size: var(--font-size-h4);
+  font-weight: var(--fw-bold);
+  line-height: var(--line-height-h4);
+}
+
+.h5, .h6, h5, h6 {
+  font-size: var(--font-size-default);
+  font-weight: var(--fw-bold);
+  line-height: var(--line-height-default);
+  text-transform: uppercase
+}
+
+.lead {
+  font-weight: var(--fw-bold);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3)
+}
+
+p {
+  font-weight: var(--fw-default);
+  margin-top: 0;
+  margin-bottom: 8px
+}
+
+.section-header {
+  font-weight: var(--fw-bold);
+  font-size: var(--font-size-default);
+  line-height: var(--line-height-default)
+}
+

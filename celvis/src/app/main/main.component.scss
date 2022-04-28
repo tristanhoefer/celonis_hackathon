@@ -1,0 +1,32 @@
+.color-test1 {
+  background-color: var(--color-brand-primary);
+  color: var(--menu-text-color);
+
+  &:hover {
+    background-color: var(--color-brand-primary-hover);
+  }
+}
+
+.color-test2 {
+  background-color: var(--bg-lightest-grayish-blue);
+  color: var(--default-text-color);
+}
+
+.color-test3 {
+  background-color: var(--bg-light-grayish-blue);
+  color: var(--default-text-color);
+
+  &:hover {
+    background-color: var(--color-gray-lightest);
+  }
+}
+
+.color-test1, .color-test2, .color-test3 {
+  padding: .5rem 1rem;
+  width: fit-content;
+}
+
+.test-primary-font {
+  font-size: var(--font-size-h3);
+  color: var(--color-brand-primary);
+}

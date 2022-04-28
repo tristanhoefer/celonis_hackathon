@@ -1,1 +1,85 @@
+@use "src/app/utility/normalize"; // Reset Styles
+
 /* You can add global styles to this file, and also import other style files */
+
+// Set CSS Custom Properties
+html {
+  // Define Custom Properties
+  --font-family: Arial, Helvetica, sans-serif;
+
+  // Font Properties
+  --fw-bold: 700;
+  --fw-default: 400;
+  --font-size-html: 13px;
+  --font-size-default: 13px;
+  --font-size-body: var(--font-size-default);
+  --font-size-h1: 32px;
+  --font-size-h2: 24px;
+  --font-size-h3: 18px;
+  --font-size-h4: var(--font-size-default);
+
+  // Line Heights
+  --line-height-default: 16px;
+  --line-height-h1: 40px;
+  --line-height-h2: 32px;
+  --line-height-h3: 24px;
+  --line-height-h4: var(--line-height-default);
+
+  // Focus
+  --focus-box-shadow: 0 0 3px 1px #00c3ff;
+  --focus-outline: 0 !important;
+
+  // Color Scheme
+  --container-background-color-dark: #f1f1f1; // Basic Background Color
+  --container-background-color-light: #fff; // Background Color of "Containers" on top of the Background
+  --separating-line-color: #c6c6c6; // Separator Line to separate i.e., multiple sections
+  --background-color-hover: #ebebeb; // Color of Hovering Item
+  --background-color-normal: #fff; // Color of a normal Item
+  --default-text-color: #000; // Default Font Color
+  --default-text-color-light: #4f586d; // "Light Gray" Color
+  --menu-background-color: #000;  // Background Color of Side-Menu
+  --menu-text-color: #fff;  // Text Color of the Side-Menu
+
+  // Primary Brand Colors
+  --color-brand-orange: #df9356;
+  --color-brand-primary: #14a9d5;
+  --color-brand-primary-hover: #40c2e8;
+  --color-brand-primary-active: #1d6c83;
+  --color-brand-primary-selected: #cee9f1;
+  --color-brand-primary-lightest: #f9f9f9;
+  --color-modal-header-bg: #9bd2e2;
+  --color-brand-green: #87c99b;
+
+  // Gray Tones
+  --color-gray-lightest: #f1f1f1;
+  --color-gray-lighter: #e4e4e4;
+  --color-gray-border: #ccc;
+  --color-gray-light: #aaa;
+  --color-gray-dark: #888;
+  --color-gray-darker: #666;
+  --color-gray-darkest: #555;
+
+  // Grayish Colors
+  --color-dark-grayish-blue: #889aab;
+  --bg-lightest-grayish-blue: #eaf2f5;
+  --bg-light-grayish-blue: #c8e5f0;
+  --bg-grayish-blue: #a0d2e5;
+  --bg-dark-grayish-blue: #889aab;
+  --bg-very-dark-grayish-blue: #4f586d;
+
+  // Other Colors from Celonis (if necessary)
+  //--color-brand-red: #c9727a;
+  //--color-brand-yellow: #e3a914;
+  //--color-brand-purple: #9c68cd;
+  //--color-red-light: #ff8884;
+  //--color-dark-blue: #0d6b87;
+  //--color-rank-1: #4fd7b5;
+  //--color-rank-2: #4cb8c4;
+  //--color-rank-3: #eec870;
+  //--color-rank-4: #ff8884;
+  //--bg-rank-1: #4fd7b5;
+  //--bg-rank-2: #4cb8c4;
+  //--bg-rank-3: #eec870;
+  //--bg-rank-4: #ff8884;
+  //--color-strong-blue: #0778d0;
+}

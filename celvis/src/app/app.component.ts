@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'celvis';
 
   // Here nothing logical should be done, only in separate components (for example "main")
 }

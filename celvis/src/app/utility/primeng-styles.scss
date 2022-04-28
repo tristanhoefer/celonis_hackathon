@@ -1,0 +1,7 @@
+// Overwrite default Prime-NG Styles here if necessary
+:host ::ng-deep {
+  .p-component {
+    font-family: var(--font-family);
+  }
+
+}
