@@ -7,11 +7,13 @@ import { MainComponent } from './main/main.component';
 import {CascadeSelectModule} from "primeng/cascadeselect";
 import {FormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { PlotlyTestComponent } from './plotly-test/plotly-test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent
+    MainComponent,
+    PlotlyTestComponent
   ],
   imports: [
     BrowserModule,
