@@ -8,21 +8,30 @@ import {CascadeSelectModule} from "primeng/cascadeselect";
 import {FormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { PlotlyTestComponent } from './plotly-test/plotly-test.component';
+import {HttpClientModule} from "@angular/common/http";
+import { ApiTestComponent } from './api-test/api-test.component';
+import {ApiHttpService} from "./api/ApiHttpService";
+import {ApiEndpointsService} from "./api/api-endpoints.service";
+import {Constants} from "./api/constants";
+import {ListboxModule} from "primeng/listbox";
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    PlotlyTestComponent
+    PlotlyTestComponent,
+    ApiTestComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    ListboxModule,
     CascadeSelectModule,
     FormsModule
   ],
-  providers: [],
+  providers: [ApiHttpService, ApiEndpointsService, Constants],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

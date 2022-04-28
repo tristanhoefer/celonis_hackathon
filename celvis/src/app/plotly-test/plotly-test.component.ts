@@ -16,7 +16,7 @@ export class PlotlyTestComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    var data = [
+    const data = [
       {
         x: [0, 1, 2],
         y: [6, 10, 2],
@@ -28,6 +28,11 @@ export class PlotlyTestComponent implements OnInit {
         type: 'scatter'
       }
     ];
-    Plotly.newPlot('myDiv', data);
+    const layout = {
+      title: "Responsive to Window size!",
+      font: {size: 18}
+    }
+    const config = {responsive: true}
+    Plotly.newPlot('myDiv', data, layout, config);
   }
 }
