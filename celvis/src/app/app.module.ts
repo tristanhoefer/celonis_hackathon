@@ -17,6 +17,7 @@ import {ListboxModule} from "primeng/listbox";
 import {DataService} from "./api/data-service";
 import { SettingsComponent } from './settings/settings.component';
 import {SliderModule} from "primeng/slider";
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {SliderModule} from "primeng/slider";
     MainComponent,
     PlotlyTestComponent,
     ApiTestComponent,
-    SettingsComponent
+    SettingsComponent,
+    HeaderComponent
   ],
     imports: [
         BrowserModule,
