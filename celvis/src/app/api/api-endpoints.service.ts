@@ -22,6 +22,33 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Pass a valid PQL-query string into this function and you can pass the return of this
+   * into the POST-Request so that you get the correct results
+   * @param query PQL-Query
+   */
+  createPQLQueryBody(query: string): any {
+    return {
+      "variables": [],
+      "requests": [
+        {
+          "id": "fb554a5e-f245-4d09-a451-69a0a3d8addb",
+          "request": {
+            "commands": [
+              {
+                "computationId": 0,
+                "queries": [
+                  query
+                ]
+              }
+            ]
+          }
+        },
+      ],
+      "version": 1
+    }
+  }
+
+  /**
    * Create a URL by concatenating the endpoint with the action
    * Example-URL to create: URL/asdf1234
    * @param action Path which should be appended to the API Endpoint

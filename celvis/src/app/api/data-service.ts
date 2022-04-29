@@ -48,6 +48,8 @@ export class DataService {
     })
   }
 
+  public getDataModelFromAPI = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_model', false);
+
   getTables() {
     const url = this.getDataModelFromAPI()
     this.apiHttpService.get(url).subscribe((response: any) => {
@@ -77,11 +79,22 @@ export class DataService {
     })
   }
 
+  getSelectedColData(tableName: string) {
+    // const query = "TABLE (DISTINCT\n\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"\n) ORDER BY \"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\" ASC LIMIT 99999"
+    const query =  "TABLE ( ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 ) \nAS \"New Expression\") ORDER BY ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 )\n DESC LIMIT 400 OFFSET 0"
+    const body = this.apiEndpoint.createPQLQueryBody(query)
+
+    console.log(this.data_service_batch());
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      console.log("GOT DATA: ", data);
+    })
+
+  }
 
 
-  public testCelonis = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_service_batch', false);
 
-  public getDataModelFromAPI = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_model', false);
+  public data_service_batch = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_service_batch', false);
+
 
 
   /* CUSTOM (APPLICATION SPECIFIC) API CALLS GO HERE */
