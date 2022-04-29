@@ -16,6 +16,7 @@ import {Constants} from "./api/constants";
 import {ListboxModule} from "primeng/listbox";
 import {DataService} from "./api/data-service";
 import { SettingsComponent } from './settings/settings.component';
+import {SliderModule} from "primeng/slider";
 
 @NgModule({
   declarations: [
@@ -25,15 +26,16 @@ import { SettingsComponent } from './settings/settings.component';
     ApiTestComponent,
     SettingsComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    ListboxModule,
-    CascadeSelectModule,
-    FormsModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        ListboxModule,
+        CascadeSelectModule,
+        FormsModule,
+        SliderModule
+    ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]
 })

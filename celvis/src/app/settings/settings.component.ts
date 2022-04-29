@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from "../api/data-service";
+import {SliderModule} from 'primeng/slider';
+
 
 @Component({
   selector: 'settings',
@@ -11,6 +13,11 @@ export class SettingsComponent implements OnInit {
   selectedTable: any = {};
   tables: any = [];
 
+  val: number = 50; //initial number for slider
+  min: number = 0; //min value for slider
+  max: number = 1000; //max value for slider
+
+  rangeValues: number[] = [20,80];
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
