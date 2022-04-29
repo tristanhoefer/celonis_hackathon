@@ -33,24 +33,21 @@ export class DataService {
    * @param url URL to query
    * @param options Query Options
    */
-  updateData(url: string, options?: any) {
+  updateData(url: string, body: any, options?: any) {
     this.current_url = url;
-    this.apiHttpService.get(url, options).subscribe((data: any) => {
-      console.log("Found Data: ", data);
+    // this.apiHttpService.get(url, options).subscribe((data: any) => {
+    //   console.log("Found Data: ", data);
+    //   this.dataSub.next(data);
+    //   this.data = data;
+    // });
+    this.apiHttpService.post(url, body, options).subscribe((data: any) => {
       this.dataSub.next(data);
       this.data = data;
-    });
+      console.log("FOUND: ", data);
+    })
   }
 
   public testCelonis = (): string => this.apiEndpoint.createUrl('analysis/1f166609-693a-4650-ae5a-4d537ff6a7a8/data_service_batch', false);
-
-  test(url: string, data: any, options?: any) {
-    const asdf = this.apiHttpService.post(url, data, options).subscribe((data: any) => {
-      console.log("FOUND: ", data);
-    })
-    console.log(asdf);
-  }
-  // https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/process-analytics/analysis/v2/api/analysis/1f166609-693a-4650-ae5a-4d537ff6a7a8/data_service_batch
 
 
   /* CUSTOM (APPLICATION SPECIFIC) API CALLS GO HERE */

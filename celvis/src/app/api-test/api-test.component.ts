@@ -68,13 +68,13 @@ export class ApiTestComponent implements OnInit {
       "version": 1
     }
 
-    this.dataService.test(url, body)
+    this.dataService.updateData(url, body)
 
 
 
     // React to Data Changes
     this.dataService.dataSub.subscribe((data: any) => {
-      this.options = data.options;
+      this.options = data;
     })
 
 
