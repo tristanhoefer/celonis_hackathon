@@ -1,0 +1,7 @@
+<div class="center-list">
+  <p-cascadeSelect [(ngModel)]="selectedTable" [options]="tables" optionLabel="name" optionGroupLabel="name"
+                   [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
+                   placeholder="Select a City"></p-cascadeSelect>
+
+  <!--  <p-listbox [options]="options" [(ngModel)]="selectedOption" [filter]="true" optionValue="name" optionLabel="name" [style]="{'width':'15rem'}"></p-listbox>-->
+</div>

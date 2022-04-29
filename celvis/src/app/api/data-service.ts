@@ -31,8 +31,6 @@ export class DataService {
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
   }
 
-  // Here we can also manage the states of the currently queried API and thus modify it somehow...
-
 
   /**
    * Function which gets passed an URL. Afterwards it performs a http get request.
