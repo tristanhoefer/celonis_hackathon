@@ -38,5 +38,6 @@ export class SettingsComponent implements OnInit {
     // Get Column Data
     console.log("Changed to ", this.selectedTable);
     this.dataService.getSelectedColData(this.selectedTable);
+    this.dataService.getSliderData(this.selectedTable);
   }
 }
