@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiEndpointsService} from "../api/api-endpoints.service";
 import {ApiHttpService} from "../api/ApiHttpService";
 import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
+import {DataService} from "../api/data-service";
 
 @Component({
   selector: 'api-test',
@@ -16,7 +16,7 @@ export class ApiTestComponent implements OnInit {
   // List of all Options available to display inside the item list
   options: any[] = [];
 
-  constructor(private apiHttpService: ApiHttpService, private apiEndpointsService: ApiEndpointsService) {
+  constructor(private dataService: DataService, private apiHttpService: ApiHttpService) {
   }
 
 
@@ -29,19 +29,22 @@ export class ApiTestComponent implements OnInit {
         Inside the "data" variable, we receive the result of the API-Call (in this case a simple json file with names)
         Those names are filled in the "this.options", which itself is used in the html-file to populate the item list
      */
-    this.apiHttpService.get(this.apiEndpointsService.getListboxData()).subscribe((data: any) => {
-        console.log('News loaded');
-        console.log("Found Data: ", data);
-        this.options = data.options;
-      });
+
+    // Update Data of DataService
+    this.dataService.updateData(this.dataService.getListboxData())
+
+    // React to Data Changes
+    this.dataService.dataSub.subscribe((data: any) => {
+      this.options = data.options;
+    })
 
 
     // Console Log some more Test-API Calls
-    console.log(this.apiEndpointsService.getListboxData())
-    console.log(this.apiEndpointsService.getDataByIdEndpoint("123"))
-    console.log(this.apiEndpointsService.getDataByIdAndCodeEndpoint("123", 999))
-    console.log(this.apiEndpointsService.getDataByIdCodeAndYearEndpoint("123", 999, 666))
-    console.log(this.apiEndpointsService.getProductListByCountryCodeEndpoint("DE"))
-    console.log(this.apiEndpointsService.getProductListByCountryAndPostalCodeEndpoint("US", "123"));
+    console.log(this.dataService.getListboxData())
+    console.log(this.dataService.getDataByIdEndpoint("123"))
+    console.log(this.dataService.getDataByIdAndCodeEndpoint("123", 999))
+    console.log(this.dataService.getDataByIdCodeAndYearEndpoint("123", 999, 666))
+    console.log(this.dataService.getProductListByCountryCodeEndpoint("DE"))
+    console.log(this.dataService.getProductListByCountryAndPostalCodeEndpoint("US", "123"));
   }
 }

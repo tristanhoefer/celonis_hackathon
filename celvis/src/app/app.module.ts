@@ -14,6 +14,7 @@ import {ApiHttpService} from "./api/ApiHttpService";
 import {ApiEndpointsService} from "./api/api-endpoints.service";
 import {Constants} from "./api/constants";
 import {ListboxModule} from "primeng/listbox";
+import {DataService} from "./api/data-service";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import {ListboxModule} from "primeng/listbox";
     CascadeSelectModule,
     FormsModule
   ],
-  providers: [ApiHttpService, ApiEndpointsService, Constants],
+  providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
