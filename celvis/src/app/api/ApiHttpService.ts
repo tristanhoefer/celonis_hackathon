@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {catchError, throwError} from "rxjs";
 
 /**
@@ -17,7 +17,16 @@ export class ApiHttpService {
 
   // Send POST request to given url with given data
   public post(url: string, data: any, options?: any) {
-    return this.http.post(url, data, options);
+    const opts = {
+      "headers": new HttpHeaders({
+        // 'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding, X-Auth-Token, content-type',
+        // 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+        'Authorization': 'Bearer OTc4MDA5ZjMtZmMxNC00ODRkLWFhMjMtNGVjNTFiNmNlMTVhOjBGZ2J0NlU1SVJYMTBybUhtcWZFeGFKRzgvK0JBU1VLbEFGZldLZ21VM2lu'
+      })
+    }
+    return this.http.post(url, data, opts).pipe(catchError(this.handleError));
   }
 
   // Send PUT request to given url with given data

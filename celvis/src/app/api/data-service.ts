@@ -42,6 +42,16 @@ export class DataService {
     });
   }
 
+  public testCelonis = (): string => this.apiEndpoint.createUrl('analysis/1f166609-693a-4650-ae5a-4d537ff6a7a8/data_service_batch', false);
+
+  test(url: string, data: any, options?: any) {
+    const asdf = this.apiHttpService.post(url, data, options).subscribe((data: any) => {
+      console.log("FOUND: ", data);
+    })
+    console.log(asdf);
+  }
+  // https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/process-analytics/analysis/v2/api/analysis/1f166609-693a-4650-ae5a-4d537ff6a7a8/data_service_batch
+
 
   /* CUSTOM (APPLICATION SPECIFIC) API CALLS GO HERE */
   /*

@@ -31,7 +31,46 @@ export class ApiTestComponent implements OnInit {
      */
 
     // Update Data of DataService
-    this.dataService.updateData(this.dataService.getListboxData())
+    const url = this.dataService.testCelonis()
+    console.log(url);
+    const body = {
+      "variables": [],
+      "requests": [
+        {
+          "id": "date-selection-\"mobis_challenge_log_2019_csv\".\"START\"",
+          "request": {
+            "commands": [
+              {
+                "computationId": 0,
+                "queries": [
+                  "TABLE(MIN(\"mobis_challenge_log_2019_csv\".\"START\"), MAX(\"mobis_challenge_log_2019_csv\".\"START\"));"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "fetch-data",
+          "request": {
+            "commands": [
+              {
+                "computationId": 0,
+                "isTransient": null,
+                "queries": [
+                  "DOMAIN ( \"mobis_challenge_log_2019_csv\".\"START\"  )  LIMIT 400 OFFSET 0"
+                ]
+              }
+            ],
+            "cubeId": null
+          }
+        }
+      ],
+      "version": 1
+    }
+
+    this.dataService.test(url, body)
+
+
 
     // React to Data Changes
     this.dataService.dataSub.subscribe((data: any) => {
