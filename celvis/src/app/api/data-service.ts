@@ -11,6 +11,7 @@ import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
 @Injectable()
 @AutoUnsubscribe()
 export class DataService {
+  readonly KEY: string  = "99f38193-e510-4635-9f0a-c0b98b13b451"
 
   // Data object with current data queried from the API
   data: any = {};
@@ -47,7 +48,17 @@ export class DataService {
     })
   }
 
-  public testCelonis = (): string => this.apiEndpoint.createUrl('analysis/1f166609-693a-4650-ae5a-4d537ff6a7a8/data_service_batch', false);
+  getTables() {
+    const url = this.getDataModelFromAPI()
+    console.log("ASK URL: ", url);
+    return this.apiHttpService.get(url);
+  }
+
+
+
+  public testCelonis = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_service_batch', false);
+
+  public getDataModelFromAPI = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_model', false);
 
 
   /* CUSTOM (APPLICATION SPECIFIC) API CALLS GO HERE */

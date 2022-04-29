@@ -1,7 +1,9 @@
 <div class="center-list">
-<!--  <p-listbox [options]="options" [(ngModel)]="selectedOption" [filter]="true" optionValue="name" optionLabel="name" [style]="{'width':'15rem'}"></p-listbox>-->
+  <p-cascadeSelect [(ngModel)]="selectedOption" [options]="table" optionLabel="name" optionGroupLabel="name"
+                   [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}" placeholder="Select a City"></p-cascadeSelect>
+
+  <!--  <p-listbox [options]="options" [(ngModel)]="selectedOption" [filter]="true" optionValue="name" optionLabel="name" [style]="{'width':'15rem'}"></p-listbox>-->
 </div>
 
-
-
 <pre>{{options | json}}</pre>
+

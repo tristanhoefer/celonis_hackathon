@@ -11,14 +11,18 @@ import {DataService} from "../api/data-service";
 @AutoUnsubscribe()  // Automatically Unsubscribe from all subscriptions in this component
 export class ApiTestComponent implements OnInit {
   // Currently Selected Option of the Item List
-  selectedOption: string = "Nothing Selected";
+  selectedOption: any = {};
 
   // List of all Options available to display inside the item list
   options: any[] = [];
 
+  columns: any[] = [];
+
   constructor(private dataService: DataService, private apiHttpService: ApiHttpService) {
   }
 
+
+  table: any[] = [];
 
   ngOnInit() {
     /*
@@ -37,38 +41,65 @@ export class ApiTestComponent implements OnInit {
       "variables": [],
       "requests": [
         {
-          "id": "date-selection-\"mobis_challenge_log_2019_csv\".\"START\"",
-          "request": {
-            "commands": [
-              {
-                "computationId": 0,
-                "queries": [
-                  "TABLE(MIN(\"mobis_challenge_log_2019_csv\".\"START\"), MAX(\"mobis_challenge_log_2019_csv\".\"START\"));"
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": "fetch-data",
+          "id": "24c7c893-bcd5-47da-bde1-d26399be7d5c||24c7c893-bcd5-47da-bde1-d26399be7d5c||fetch-data",
           "request": {
             "commands": [
               {
                 "computationId": 0,
                 "isTransient": null,
                 "queries": [
-                  "DOMAIN ( \"mobis_challenge_log_2019_csv\".\"START\"  )  LIMIT 400 OFFSET 0"
+                  " TABLE ( ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 ) \nAS \"New Expression\") ORDER BY ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 )\n DESC LIMIT 400 OFFSET 0"
                 ]
               }
             ],
             "cubeId": null
           }
-        }
+        },
       ],
       "version": 1
     }
 
     this.dataService.updateData(url, body)
+
+
+    this.dataService.getTables().subscribe((response: any) => {
+      const constructed_table: any = [];
+      // console.log("TABLES: ", response.tables);
+      response.tables.forEach((table: any) => {
+        const table_obj: any = {};
+        table_obj.name= table.name;
+        table_obj.shortName= table.shortName;
+        table_obj.id= table.id;
+
+        /*
+        * active: true
+          description: "_CASE_KEY"
+          id: "NN8Yjti_TYhtWijuhUcktYp614TOGHbi_hG-AGIa7j4"
+          name: "_CASE_KEY"
+          selected: false
+          shortName: "_CASE_KEY"
+          type: "STRING"*/
+        table_obj.columns = [];
+        table.columns.forEach((col: any) => {
+          const col_obj: any = {};
+          col_obj.name= col.name;
+          col_obj.shortName= col.shortName;
+          col_obj.id= col.id;
+          table_obj.columns.push(col_obj);
+        })
+
+        constructed_table.push(table_obj);
+      })
+
+      this.table = constructed_table;
+      console.log(constructed_table);
+    })
+    // https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/process-analytics/analysis/v2/api/analysis/99f38193-e510-4635-9f0a-c0b98b13b451/data_service_batch
+    // https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/process-analytics/analysis/v2/api/analysis/99f38193-e510-4635-9f0a-c0b98b13b451/data_model
+    // this.dataService.getTables().subscribe((data: any) => {
+    //
+    // })
+
 
 
 
@@ -79,11 +110,11 @@ export class ApiTestComponent implements OnInit {
 
 
     // Console Log some more Test-API Calls
-    console.log(this.dataService.getListboxData())
-    console.log(this.dataService.getDataByIdEndpoint("123"))
-    console.log(this.dataService.getDataByIdAndCodeEndpoint("123", 999))
-    console.log(this.dataService.getDataByIdCodeAndYearEndpoint("123", 999, 666))
-    console.log(this.dataService.getProductListByCountryCodeEndpoint("DE"))
-    console.log(this.dataService.getProductListByCountryAndPostalCodeEndpoint("US", "123"));
+    // console.log(this.dataService.getListboxData())
+    // console.log(this.dataService.getDataByIdEndpoint("123"))
+    // console.log(this.dataService.getDataByIdAndCodeEndpoint("123", 999))
+    // console.log(this.dataService.getDataByIdCodeAndYearEndpoint("123", 999, 666))
+    // console.log(this.dataService.getProductListByCountryCodeEndpoint("DE"))
+    // console.log(this.dataService.getProductListByCountryAndPostalCodeEndpoint("US", "123"));
   }
 }
