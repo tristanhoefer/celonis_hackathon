@@ -91,6 +91,18 @@ export class DataService {
 
   }
 
+  getSliderData(tableName: string) {
+    // const query = "TABLE (DISTINCT\n\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"\n) ORDER BY \"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\" ASC LIMIT 99999"
+    const query =  "ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"tableName\".\"Action\"), 3, 20, 3 )"
+    const body = this.apiEndpoint.createPQLQueryBody(query)
+
+    console.log(this.data_service_batch());
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      console.log("GOT DATA Tristan: ", data);
+    })
+
+  }
+
 
 
   public data_service_batch = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_service_batch', false);
