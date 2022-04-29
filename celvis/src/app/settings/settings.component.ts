@@ -11,6 +11,9 @@ export class SettingsComponent implements OnInit {
   selectedTable: any = {};
   tables: any = [];
 
+  selectedTree: any = {};
+  tree: any = [];
+
   selectedColumnData: any = {};
   colData: any = [];
 
@@ -21,8 +24,13 @@ export class SettingsComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
-    // Get all Tables from the Dataset
-    this.dataService.getTables();
+
+    this.dataService.getPackage();
+
+    this.dataService.treeSub.subscribe((data: any) => {
+      console.log(data);
+      this.tree = data;
+    })
 
     // Subscribe to the Tables
     this.dataService.tableSub.subscribe((data: any) => {
@@ -33,6 +41,12 @@ export class SettingsComponent implements OnInit {
 
   }
 
+  loadTree() {
+    // Get all Tables from the Dataset
+    console.log(this.selectedTree);
+    this.dataService.dataset_key = this.selectedTree.id;
+    this.dataService.getTables();
+  }
 
   updateTableSelection() {
     // Get Column Data

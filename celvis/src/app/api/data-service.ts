@@ -11,7 +11,9 @@ import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
 @Injectable()
 @AutoUnsubscribe()
 export class DataService {
-  readonly KEY: string  = "99f38193-e510-4635-9f0a-c0b98b13b451"
+  // readonly KEY: string  = "99f38193-e510-4635-9f0a-c0b98b13b451"
+
+  dataset_key: string = "";
 
   // Data object with current data queried from the API
   data: any = {};
@@ -26,6 +28,12 @@ export class DataService {
   table: any = {};
   // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
   tableSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
+
+  // Data object with current data queried from the API
+  tree: any = {};
+  // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
+  treeSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
@@ -48,7 +56,7 @@ export class DataService {
     })
   }
 
-  public getDataModelFromAPI = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_model', false);
+  public getDataModelFromAPI = (): string => this.apiEndpoint.createUrl('analysis/' + this.dataset_key + '/data_model', false);
 
   getTables() {
     const url = this.getDataModelFromAPI()
@@ -79,6 +87,69 @@ export class DataService {
     })
   }
 
+  getPackage() {
+    const url =   "https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/package-manager//api/nodes/tree?spaceId=eb9a8418-c31c-4977-926e-925ec6147fca";
+
+    this.apiHttpService.get(url).subscribe((response: any) => {
+      let assets: any[] = [];
+      let folders: any[] = [];
+      let packages: any[] = [];
+      response.forEach((r: any) => {
+        switch(r.nodeType) {
+          case "ASSET":
+            assets.push(r)
+            break;
+          case "FOLDER":
+            folders.push(r);
+            break;
+          case "PACKAGE":
+            packages.push(r);
+            break;
+        }
+      })
+
+      const tree_map: any[] = [];
+      packages.forEach((p: any) => {
+        tree_map.push({
+          "key": p.key,
+          "name": p.name,
+          "parentNodeKey": p.parentNodeKey,
+          "id": p.id,
+          "folders": []
+        });
+      });
+
+      folders.forEach((f: any) => {
+        const index = tree_map.findIndex((p) => p.key === f.parentNodeKey);
+        if(index === -1) return;
+        tree_map[index].folders.push({
+          "key": f.key,
+          "name": f.name,
+          "parentNodeKey": f.parentNodeKey,
+          "id": f.id,
+          "assets": []
+        });
+      })
+
+      assets.forEach((as: any) => {
+        const index = tree_map.findIndex((p: any) => p.key === as.rootNodeKey);
+        if(index === -1) return;
+        const correct_idx = tree_map[index].folders.findIndex((p: any) => p.key === as.parentNodeKey);
+        if(correct_idx === -1) return;
+        tree_map[index].folders[correct_idx].assets.push({
+          "key": as.key,
+          "name": as.name,
+          "parentNodeKey": as.parentNodeKey,
+          "id": as.id,
+        });
+      })
+
+
+      this.tree = tree_map;
+      this.treeSub.next(tree_map);
+    });
+  }
+
   getSelectedColData(tableName: string) {
     // const query = "TABLE (DISTINCT\n\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"\n) ORDER BY \"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\" ASC LIMIT 99999"
     const query =  "TABLE ( ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 ) \nAS \"New Expression\") ORDER BY ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 )\n DESC LIMIT 400 OFFSET 0"
@@ -105,7 +176,9 @@ export class DataService {
 
 
 
-  public data_service_batch = (): string => this.apiEndpoint.createUrl('analysis/' + this.KEY + '/data_service_batch', false);
+  public data_service_batch = (): string => this.apiEndpoint.createUrl('analysis/' + this.dataset_key + '/data_service_batch', false);
+
+
 
 
 
