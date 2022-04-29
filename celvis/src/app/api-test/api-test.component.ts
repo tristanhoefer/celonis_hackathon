@@ -62,38 +62,6 @@ export class ApiTestComponent implements OnInit {
     this.dataService.updateData(url, body)
 
 
-    this.dataService.getTables().subscribe((response: any) => {
-      const constructed_table: any = [];
-      // console.log("TABLES: ", response.tables);
-      response.tables.forEach((table: any) => {
-        const table_obj: any = {};
-        table_obj.name= table.name;
-        table_obj.shortName= table.shortName;
-        table_obj.id= table.id;
-
-        /*
-        * active: true
-          description: "_CASE_KEY"
-          id: "NN8Yjti_TYhtWijuhUcktYp614TOGHbi_hG-AGIa7j4"
-          name: "_CASE_KEY"
-          selected: false
-          shortName: "_CASE_KEY"
-          type: "STRING"*/
-        table_obj.columns = [];
-        table.columns.forEach((col: any) => {
-          const col_obj: any = {};
-          col_obj.name= col.name;
-          col_obj.shortName= col.shortName;
-          col_obj.id= col.id;
-          table_obj.columns.push(col_obj);
-        })
-
-        constructed_table.push(table_obj);
-      })
-
-      this.table = constructed_table;
-      console.log(constructed_table);
-    })
     // https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/process-analytics/analysis/v2/api/analysis/99f38193-e510-4635-9f0a-c0b98b13b451/data_service_batch
     // https://academic-henrik-falke-rwth-aachen-de.eu-2.celonis.cloud/process-analytics/analysis/v2/api/analysis/99f38193-e510-4635-9f0a-c0b98b13b451/data_model
     // this.dataService.getTables().subscribe((data: any) => {

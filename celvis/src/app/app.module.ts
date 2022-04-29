@@ -15,13 +15,15 @@ import {ApiEndpointsService} from "./api/api-endpoints.service";
 import {Constants} from "./api/constants";
 import {ListboxModule} from "primeng/listbox";
 import {DataService} from "./api/data-service";
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     PlotlyTestComponent,
-    ApiTestComponent
+    ApiTestComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

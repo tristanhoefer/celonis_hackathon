@@ -15,12 +15,18 @@ export class DataService {
 
   // Data object with current data queried from the API
   data: any = {};
+  // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
+  dataSub: BehaviorSubject<any> = new BehaviorSubject({});
 
   // Current URL (TODO: Maybe add some sort of object here later on so manage the states, depending on the API complexity)
   current_url: string = "";
 
+
+  // Data object with current data queried from the API
+  table: any = {};
   // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
-  dataSub: BehaviorSubject<any> = new BehaviorSubject({});
+  tableSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
 
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
   }
@@ -36,11 +42,7 @@ export class DataService {
    */
   updateData(url: string, body: any, options?: any) {
     this.current_url = url;
-    // this.apiHttpService.get(url, options).subscribe((data: any) => {
-    //   console.log("Found Data: ", data);
-    //   this.dataSub.next(data);
-    //   this.data = data;
-    // });
+
     this.apiHttpService.post(url, body, options).subscribe((data: any) => {
       this.dataSub.next(data);
       this.data = data;
@@ -50,8 +52,31 @@ export class DataService {
 
   getTables() {
     const url = this.getDataModelFromAPI()
-    console.log("ASK URL: ", url);
-    return this.apiHttpService.get(url);
+    this.apiHttpService.get(url).subscribe((response: any) => {
+      const constructed_table: any = [];
+      response.tables.forEach((table: any) => {
+        const table_obj: any = {
+          "name": table.name,
+          "shortName": table.shortName,
+          "id": table.id
+        };
+
+        table_obj.columns = [];
+        table.columns.forEach((col: any) => {
+          const col_obj: any = {
+            "name": col.name,
+            "shortName": col.shortName,
+            "id": col.id
+          };
+          table_obj.columns.push(col_obj);
+        })
+
+        constructed_table.push(table_obj);
+      })
+
+      this.table = constructed_table;
+      this.tableSub.next(constructed_table);
+    })
   }
 
 
