@@ -17,6 +17,7 @@ var Plotly = require('plotly.js-dist')
 export class PlotlyChartComponent implements OnInit {
   xAxisOptions: any[] = [];
   yAxisOptions: any[] = [];
+  xAxis: string = "Select Xaxis"
 
   // Store X-Axis Selections
   xAxisSelection: any = {};

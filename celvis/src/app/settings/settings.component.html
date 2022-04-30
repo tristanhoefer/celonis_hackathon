@@ -1,16 +1,23 @@
-Settings Menu
-<div >
+
+<div class="settings">
+<h1> Settings Menu </h1>
+
   <!-- Select Dataset -->
-  <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name"
+  <div class="padding">
+  <span class="p-float-label">
+  <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name" inputId="dataSelecetID"
                    [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
                    (onChange)="loadTree()"
-                   placeholder="Select Dataset"></p-cascadeSelect>
+                   ></p-cascadeSelect>
+    <label for="dataSelecetID">Select Dataset</label>
 
+  </span>
   <!-- Select Correct Table & Column Entry -->
   <p-cascadeSelect [(ngModel)]="selectedTable" [options]="tables" optionLabel="name" optionGroupLabel="name"
                    [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
                    (onChange)="updateColumnSelection()" *ngIf="tables?.length"
                    placeholder="Select Column"></p-cascadeSelect>
+  </div>
 </div>
 
 

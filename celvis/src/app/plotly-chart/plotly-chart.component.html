@@ -3,19 +3,28 @@
 
   <div class="center axis-selector">
     <!-- X-Axis Selection -->
-    <p-cascadeSelect [(ngModel)]="xAxisSelection" [options]="xAxisOptions"
+    <span class="p-float-label">
+    <p-cascadeSelect [(ngModel)]="xAxisSelection" [options]="xAxisOptions" inputId="xAxisID"
                      styleClass="xAxisSelect"
                      optionLabel="name" optionGroupLabel="name"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
                      (onChange)="xChange()"
-                     placeholder="Select xAxis"></p-cascadeSelect>
+                     > </p-cascadeSelect>
 
+        <label for="xAxisID">Select xAxis</label>
+    </span>
+  <div class ="yAxisPadding">
+  </div>
     <!-- Y-Axis Selection -->
-    <p-cascadeSelect [(ngModel)]="yAxisSelection" [options]="yAxisOptions"
+    <span class="p-float-label" >
+    <p-cascadeSelect [(ngModel)]="yAxisSelection" [options]="yAxisOptions" inputId="yAxisID"
                      styleClass="yAxisSelect"
                      optionLabel="name" optionGroupLabel="name"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
                      (onChange)="yChange()"
-                     placeholder="Select yAxis"></p-cascadeSelect>
+                     ></p-cascadeSelect>
+      <label for="yAxisID">Select yAxis</label>
+    </span>
+
   </div>
 </div>
