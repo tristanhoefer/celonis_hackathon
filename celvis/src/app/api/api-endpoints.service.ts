@@ -25,8 +25,12 @@ export class ApiEndpointsService {
    * Pass a valid PQL-query string into this function and you can pass the return of this
    * into the POST-Request so that you get the correct results
    * @param query PQL-Query
+   * @param limit Query Result Limit
+   * @param offset Query Result Offset
    */
-  createPQLQueryBody(query: string): any {
+  createPQLQueryBody(query: string, limit: number | null = 50, offset: number = 0): any {
+    const limit_string: string = (limit) ? " LIMIT " + limit : "";
+    const offset_string: string = (offset) ? " OFFSET " + offset : "";
     return {
       "variables": [],
       "requests": [
@@ -37,7 +41,9 @@ export class ApiEndpointsService {
               {
                 "computationId": 0,
                 "queries": [
-                  query
+                  "TABLE (" +
+                  query +
+                  ")" + limit_string + " " + offset_string
                 ]
               }
             ]

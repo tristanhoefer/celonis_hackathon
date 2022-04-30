@@ -30,6 +30,12 @@ export class DataService {
   tableSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
+  // Colum Name
+  colName: any = {};
+
+  // Name of the selected Table
+  tableName: any = {};
+
   // Data object with current data queried from the API
   tree: any = {};
   // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
@@ -72,6 +78,7 @@ export class DataService {
         table_obj.columns = [];
         table.columns.forEach((col: any) => {
           const col_obj: any = {
+            "parentName": table.name,
             "name": col.name,
             "shortName": col.shortName,
             "id": col.id
@@ -82,6 +89,7 @@ export class DataService {
         constructed_table.push(table_obj);
       })
 
+      console.log(constructed_table);
       this.table = constructed_table;
       this.tableSub.next(constructed_table);
     })
@@ -160,6 +168,23 @@ export class DataService {
       console.log("GOT DATA: ", data);
     })
 
+  }
+
+
+  // Data object with current data queried from the API
+  clusters: any = {};
+  // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
+  clusterSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
+  getClusters(tableName: string, minPts: number, epsilon: number = 2) {
+    console.log(tableName);
+    const query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableName + "\".\"" + this.colName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n"
+    const body = this.apiEndpoint.createPQLQueryBody(query, 100000);
+
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      this.clusters = data.results[0].result.components[0].results[0];
+      this.clusterSub.next(data.results[0].result.components[0].results[0]);
+    })
   }
 
   getSliderData(tableName: string) {

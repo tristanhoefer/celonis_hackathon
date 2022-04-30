@@ -34,12 +34,16 @@ export class SettingsComponent implements OnInit {
 
     // Subscribe to the Tables
     this.dataService.tableSub.subscribe((data: any) => {
-      console.log("DATA: ", data);
       this.tables = data;
     })
 
-
+    this.dataService.clusterSub.subscribe((data: any) => {
+      if(!data.data) return;
+      this.unique_clusters = ([... new Set([].concat(...data.data))]);
+    });
   }
+
+  unique_clusters: any = {};
 
   loadTree() {
     // Get all Tables from the Dataset
@@ -51,7 +55,17 @@ export class SettingsComponent implements OnInit {
   updateTableSelection() {
     // Get Column Data
     console.log("Changed to ", this.selectedTable);
+    this.dataService.tableName = this.selectedTable.parentName;
+    this.dataService.colName = this.selectedTable.name;
     this.dataService.getSelectedColData(this.selectedTable);
     this.dataService.getSliderData(this.selectedTable);
+    this.dataService.getClusters(this.selectedTable, this.val);
   }
+
+
+  updateSlider() {
+    this.dataService.getClusters(this.selectedTable, this.val);
+  }
+
+
 }
