@@ -1,22 +1,22 @@
-
 <div class="settings">
-<h1> Settings Menu </h1>
+  <h1> Settings Menu </h1>
 
   <!-- Select Dataset -->
   <div class="padding">
   <span class="p-float-label">
-  <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name" inputId="dataSelecetID"
-                   [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
-                   (onChange)="loadTree()"
-                   ></p-cascadeSelect>
-    <label for="dataSelecetID">Select Dataset</label>
-
+    <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name"
+                     inputId="dataSelectID"
+                     [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
+                     (onChange)="loadTree()"
+    ></p-cascadeSelect>
+    <label for="dataSelectID">Select Dataset</label>
   </span>
-  <!-- Select Correct Table & Column Entry -->
-  <p-cascadeSelect [(ngModel)]="selectedTable" [options]="tables" optionLabel="name" optionGroupLabel="name"
-                   [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                   (onChange)="updateColumnSelection()" *ngIf="tables?.length"
-                   placeholder="Select Column"></p-cascadeSelect>
+
+    <!-- Select Correct Table & Column Entry -->
+    <p-cascadeSelect [(ngModel)]="selectedTable" [options]="tables" optionLabel="name" optionGroupLabel="name"
+                     [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
+                     (onChange)="updateColumnSelection()" *ngIf="tables?.length"
+                     placeholder="Select Column"></p-cascadeSelect>
   </div>
 </div>
 
@@ -27,7 +27,8 @@
   <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max" (onSlideEnd)="updateSlider()"></p-slider>
 
   <input type="text" pInputText [(ngModel)]="no_clusters_val"/>
-  <p-slider [(ngModel)]="no_clusters_val" [min]="no_clusters_min" [max]="no_clusters_max" (onSlideEnd)="updateSlider()"></p-slider>
+  <p-slider [(ngModel)]="no_clusters_val" [min]="no_clusters_min" [max]="no_clusters_max"
+            (onSlideEnd)="updateSlider()"></p-slider>
 </div>
 
 
