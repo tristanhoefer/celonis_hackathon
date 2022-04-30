@@ -22,8 +22,6 @@ export class PlotlyPiechartComponent implements OnInit {
     this.updatePieChart()
 
     this.dataService.clusterInformalDataSub.subscribe((data: any) => {
-      console.log(data);
-
       this.labels = [];
       this.values = [];
       this.labels.push(-1);

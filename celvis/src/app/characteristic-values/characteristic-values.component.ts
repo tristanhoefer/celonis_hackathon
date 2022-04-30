@@ -16,6 +16,8 @@ export class CharacteristicValuesComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.clickedIdSub.subscribe((id: number) => {
       this.clickedId = id;
+
+      console.log(this.dataService.clusters);
     })
 
     this.dataService.clusterSizeSub.subscribe((id: number) => {

@@ -50,9 +50,6 @@ export class SettingsComponent implements OnInit {
           "id": "75209638-ba94-4651-bc5c-7bc0a107a8d4"
         }})
 
-      this.dataService.getVariantCount().subscribe((data:any)=>{
-        console.log("test" + data);
-      });
     })
 
     this.dataService.clusterSub.subscribe((data: any) => {
@@ -61,7 +58,6 @@ export class SettingsComponent implements OnInit {
     });
 
     this.dataService.clusterEstimateSub.subscribe((data: any) => {
-      console.log(data.length)
       if(!data.length) return;
       this.no_cluster_data = data
       this.updateSliderClusters();
@@ -97,8 +93,6 @@ export class SettingsComponent implements OnInit {
     // this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
     this.dataService.testMiner(this.selectedVariant);
     this.dataService.getClustersEstimates(this.selectedVariant.parentName, this.selectedVariant.name);
-    console.log("MIN_PTS: ", this.min_pts_val);
-    // this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
   }
 
 

@@ -1,19 +1,19 @@
-.slider {
-  margin-left: 50px;
-  margin-right: 400px;
-}
-
-.settings {
+.row {
   display: flex;
-  margin-top: 15px;
-}
+  flex-direction: row;
+  align-items: center;
 
-.padding {
-  padding-left: 5rem;
-  margin-top: 5px;
-  display: flex;
-}
+  .explanation {
+    margin: 0;
+  }
 
-.left-padding {
-  margin-left: 20px;
+  .selection {
+    margin-left: 5rem;
+    display: flex;
+    flex-direction: row;
+
+    .second-child {
+      margin-left: 2rem;
+    }
+  }
 }

@@ -19,7 +19,7 @@ import {SliderModule} from "primeng/slider";
 import {HeaderComponent} from './header/header.component';
 import {InputTextModule} from "primeng/inputtext";
 import {MultiSelectModule} from "primeng/multiselect";
-import {PlotlyPiechartComponent} from "./piechart/plotly-piechart.component";
+import {PlotlyPiechartComponent} from "./plotly-piechart/plotly-piechart.component";
 import { CharacteristicValuesComponent } from './characteristic-values/characteristic-values.component';
 
 @NgModule({

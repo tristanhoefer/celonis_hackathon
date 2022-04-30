@@ -65,12 +65,8 @@ export class DataService {
 
   testMiner(selectedVar: any) {
     if (!selectedVar.isActivityColumn) return;
-    console.log(selectedVar)
     const body = this.apiEndpoint.createInductiveMiner(selectedVar.parentName, selectedVar.name);
 
-
-    console.log(this.data_service_batch());
-    console.log(body);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       const vertex_properties = data.results[0].result.components[0].results[0];
       const edge_properties = data.results[0].result.components[0].results[1];
@@ -116,7 +112,6 @@ export class DataService {
 
       let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(final_tree);
       let petriNet = PetriNetVanillaVisualizer.apply(acceptingPetriNet)
-      // console.log(petriNet);
       d3.select('#petriNet').graphviz().renderDot(petriNet)
     })
   }
@@ -160,9 +155,7 @@ export class DataService {
 
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       const a = data.results[0].result.components[0].results[0];
-      console.log(a);
       const content= this.convert_2d_to_1d_array(a.data);
-      console.log(data.results[0].result.components[0].results[0]);
       this.clusterEstimateSub.next(content);
     })
   }
@@ -177,16 +170,12 @@ export class DataService {
       query = "\"" + tableName + "\".\"" + columnName + "\"";
     }
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
-    console.log("QUERY: ", body)
-
-
     return this.apiHttpService.post(this.data_service_batch(), body);
   }
 
   getVariantCount(){
     const query = "COUNT ( KPI(\"Process variants\"))"
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
-    console.log("QUERY: ", body)
     return this.apiHttpService.post(this.data_service_batch(), body);
   }
 
@@ -209,7 +198,6 @@ export class DataService {
   getTablesAndColumns() {
     const url = this.getDataModelFromAPI()
     this.apiHttpService.get(url).subscribe((response: any) => {
-      console.log(response);
       this.caseTableId = response.caseTableId;
       this.activityTableId = response.activityTableId;
 
@@ -245,7 +233,6 @@ export class DataService {
       constructed_table.forEach((o: any) => {
         o.columns.forEach((c: any) => {
           if (c.isActivityColumn) {
-            console.log(c);
 
             const index = reduced_options.findIndex(e => e.id = c.parentName);
             if (index === -1) {

@@ -1,34 +1,44 @@
-
 <div id="graph"></div>
 <div id="petri-net"></div>
 
 <div class="settings">
-  <h1> Settings Menu </h1>
+  <h1>Settings</h1>
 
-  <!-- Select Dataset -->
-  <div class="padding">
-  <span class="p-float-label">
-    <p-cascadeSelect [options]="tree" optionLabel="name" optionGroupLabel="name"
-                     inputId="dataSelectID"
-                     [(ngModel)]="selectedTree"
-                     [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
-                     (onChange)="loadTree($event)"
-    ></p-cascadeSelect>
-    <label for="dataSelectID">Select Dataset</label>
-  </span>
-    <div class="left-padding">
-    <!-- Select Correct Table & Column Entry -->
-    <span class="p-float-label" *ngIf="valid_variants?.length">
-    <p-cascadeSelect #csTmp
-      [options]="valid_variants" optionLabel="name" optionGroupLabel="name"
-                     [(ngModel)]="selectedVariant"
-                     inputId="tableSelectId"
-                     [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                     (onChange)="updateColumnSelection($event)">
+  <div class="row">
+    <p class="explanation">Select Data:</p>
+    <!-- Select Dataset -->
+    <div class="selection">
+      <span class="p-float-label">
+        <p-cascadeSelect [options]="tree" optionLabel="name" optionGroupLabel="name"
+                         inputId="dataSelectID"
+                         [(ngModel)]="selectedTree"
+                         [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
+                         (onChange)="loadTree($event)"
+        ></p-cascadeSelect>
+        <label for="dataSelectID">Select Dataset</label>
+      </span>
+      <div class="left-padding">
+        <!-- Select Correct Table & Column Entry -->
+        <span class="p-float-label second-child" *ngIf="valid_variants?.length">
+              <p-cascadeSelect #csTmp
+                               [options]="valid_variants" optionLabel="name" optionGroupLabel="name"
+                               [(ngModel)]="selectedVariant"
+                               inputId="tableSelectId"
+                               [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
+                               (onChange)="updateColumnSelection($event)">
 
-   </p-cascadeSelect>
-    <label for="tableSelectId">Select Column</label>
-  </span>
+             </p-cascadeSelect>
+              <label for="tableSelectId">Select Column</label>
+            </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cluster Settings  -->
+  <div class="row">
+    <p class="explanation">Select Data:</p>
+    <div class="selection">
+
     </div>
   </div>
 </div>
@@ -38,7 +48,8 @@
 <div class="slider">
   <h5>Min Pts Value: </h5>
   <input type="text" pInputText [(ngModel)]="min_pts_val"/>
-  <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max" (onSlideEnd)="updateSliderMinPts()"></p-slider>
+  <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max"
+            (onSlideEnd)="updateSliderMinPts()"></p-slider>
 
   <h5>Estimated Number of Clusters: </h5>
   <input type="text" pInputText [(ngModel)]="no_clusters_val"/>

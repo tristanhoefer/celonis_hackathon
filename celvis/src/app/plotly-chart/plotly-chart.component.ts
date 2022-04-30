@@ -83,8 +83,6 @@ export class PlotlyChartComponent implements OnInit {
       this.num_colors = (this.dataService.getUniqueValues(
         this.dataService.convert_2d_to_1d_array(this.dataService.clusters?.data))?.length || 1)
 
-      console.log("CLUSTER DATA: ", data);
-
       // Update Colors if we have Clusters
       this.color = this.dataService.convert_2d_to_1d_array(data.data, this.generateColorByIndex.bind(this));
       this.updatePlot(this.xAxisData, this.yAxisData, this.color)
@@ -105,7 +103,6 @@ export class PlotlyChartComponent implements OnInit {
    */
   updatePlot(x: any[], y: any[], color: any[] = []) {
     if (x.length !== color.length) color = "0".repeat(x.length).split("");
-    // console.log("DATA: ", x, y);
 
     const data = [
       {

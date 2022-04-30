@@ -1,50 +1,32 @@
 <app-header></app-header>
+<div class="main-wrapper">
+  <div class="space"></div>
 
-<div class="space"></div>
+  <settings></settings>
 
-<settings></settings>
-
-<!--<h1>CelVis</h1> -->
-<div class="boxes">
-  <div class="double-card">
-    <div class="card">
-      <app-piechart></app-piechart>
+  <!--<h1>CelVis</h1> -->
+  <div class="boxes">
+    <div class="double-card">
+      <div class="card">
+        <app-piechart></app-piechart>
+      </div>
+      <div class="card">
+        <characteristic-values></characteristic-values>
+      </div>
     </div>
-    <div class="card">
-      <characteristic-values></characteristic-values>
+
+    <div class="double-card">
+      <div class="card" id="processTree"></div>
+      <div class="card" id="petriNet"></div>
+    </div>
+
+
+    <div class="full-width-card">
+      <div class="card">
+        <h1>Test Plot</h1>
+        <plotly-chart></plotly-chart>
+      </div>
     </div>
   </div>
 
-  <div class="double-card">
-    <div class="card" id="processTree"></div>
-    <div class="card" id="petriNet"></div>
-  </div>
-
-
-  <div class="full-width-card">
-    <div class="card">
-      <h1>Test Plot</h1>
-      <plotly-chart></plotly-chart>
-    </div>
-  </div>
 </div>
-
-
-<!--
-<h2>Heading 2</h2>
-<h3>Heading 3</h3>
-<h4>Heading 4</h4>
-<p>Das ist ein kleiner Test</p>
-
-<p class="test-primary-font" tabIndex="1">Schrift in der Primary Color</p>
-
-<div class="color-test1">Test mit Farben</div>
-<div class="color-test2">Weiterer Test mit Farben</div>
-<div class="color-test3">Test 3</div>
-
-<a href="">test</a>
-
-<p-cascadeSelect [(ngModel)]="selectedCity1" [options]="countries" optionLabel="cname" optionGroupLabel="name"
-                 [optionGroupChildren]="['states', 'cities']" [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
-
--->
