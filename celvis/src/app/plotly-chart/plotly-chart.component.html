@@ -24,7 +24,7 @@
     </span>
 
     <!-- X-Axis Detailed Selection -->
-    <span class="p-float-label">
+    <span class="p-float-label" *ngIf="xAxisDataOptions.length">
       <p-multiSelect [options]="xAxisDataOptions" [(ngModel)]="xAxisSelectedDataOptions"
                      [virtualScroll]="true"
                      [style]="{'minWidth': '14rem'}"
@@ -33,7 +33,7 @@
     </span>
 
     <!-- Y-Axis Detailed Selection -->
-    <span class="p-float-label">
+    <span class="p-float-label" *ngIf="yAxisDataOptions.length">
       <p-multiSelect [options]="yAxisDataOptions" [(ngModel)]="yAxisSelectedDataOptions"
                      [virtualScroll]="true"
                      [style]="{'minWidth': '14rem'}"

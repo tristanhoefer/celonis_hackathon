@@ -169,11 +169,11 @@ export class DataService {
   }
 
   getVariant(variantName: string) {
-    const query = "MATCH_ACTIVITIES ( \"BPI2017_application_xes\".\"concept:name\", NODE [" + variantName + "] )";
-    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+    const query = "MATCH_ACTIVITIES(\"BPI2017_application_xes\".\"concept:name\", NODE [" + variantName + "] )";
+    const body = this.apiEndpoint.createPQLQueryBodyWithoutTable(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      console.log(data);
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
-
       this.variants = data.results[0].result.components[0].results[0];
 
       console.log("Tristan: " + this.variants);

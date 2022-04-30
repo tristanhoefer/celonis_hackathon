@@ -56,6 +56,30 @@ export class ApiEndpointsService {
     }
   }
 
+  createPQLQueryBodyWithoutTable(query: string, limit: number | null = 400, offset: number = 0): any {
+    const limit_string: string = (limit) ? " LIMIT " + limit : "";
+    const offset_string: string = (offset) ? " OFFSET " + offset : "";
+    return {
+      "variables": [],
+      "requests": [
+        {
+          "id": "fb554a5e-f245-4d09-a451-69a0a3d8addb",
+          "request": {
+            "commands": [
+              {
+                "computationId": 0,
+                "queries": [
+                  query
+                ]
+              }
+            ]
+          }
+        },
+      ],
+      "version": 1
+    }
+  }
+
   createInductiveMiner(tableName: string, columnName: string, threshold: number = 0.2) {
     return {
       "variables": [],
