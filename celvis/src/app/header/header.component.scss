@@ -1,6 +1,13 @@
 header{
     font-size: larger;
     background-color: var(--menu-background-color);
+    color: var(--menu-text-color);
+    display: flex;
+    align-items: center;
+}
+
+.headerspace{
+    margin-left: 25px
 }
 
 .logo {
@@ -9,3 +16,4 @@ header{
     margin-bottom: 16px;
     margin-left: 50px;
 }
+
