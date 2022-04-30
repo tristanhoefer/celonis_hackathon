@@ -19,6 +19,7 @@ import {SliderModule} from "primeng/slider";
 import {HeaderComponent} from './header/header.component';
 import {InputTextModule} from "primeng/inputtext";
 import {MultiSelectModule} from "primeng/multiselect";
+import {PlotlyPiechartComponent} from "./piechart/plotly-piechart.component";
 
 @NgModule({
   declarations: [
@@ -26,12 +27,12 @@ import {MultiSelectModule} from "primeng/multiselect";
     MainComponent,
     PlotlyChartComponent,
     SettingsComponent,
-    HeaderComponent
+    HeaderComponent,
+    PlotlyPiechartComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-
     BrowserAnimationsModule,
     AppRoutingModule,
     ListboxModule,

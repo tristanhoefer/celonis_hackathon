@@ -196,6 +196,9 @@ td, th {
 
 // Style Focus
 * {
+  --font-family: "Poppins", Arial, Helvetica, sans-serif;
+  font-family: var(--font-family);
+
   &:focus, &:focus-visible {
     outline: var(--focus-outline);
     box-shadow: var(--focus-box-shadow);

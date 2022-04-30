@@ -1,11 +1,13 @@
 @use "src/app/utility/normalize"; // Reset Styles
+// Import Poppins
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap');
 
 /* You can add global styles to this file, and also import other style files */
 
 // Set CSS Custom Properties
 html {
   // Define Custom Properties
-  --font-family: Arial, Helvetica, sans-serif;
+  --font-family: "Poppins", Arial, Helvetica, sans-serif;
 
   body {background-color: rgb(233, 233, 233); overflow-x: hidden;}
 

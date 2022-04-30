@@ -6,10 +6,10 @@ var Plotly = require('plotly.js-dist')
 
 @Component({
   selector: 'app-piechart',
-  templateUrl: './piechart.component.html',
-  styleUrls: ['./piechart.component.scss']
+  templateUrl: './plotly-piechart.component.html',
+  styleUrls: ['./plotly-piechart.component.scss']
 })
-export class PiechartComponent implements OnInit {
+export class PlotlyPiechartComponent implements OnInit {
 
   constructor() { }
 

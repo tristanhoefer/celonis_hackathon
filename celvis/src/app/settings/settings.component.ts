@@ -53,7 +53,7 @@ export class SettingsComponent implements OnInit {
       this.valid_variants = this.dataService.valid_variants;
       this.cdRef.detectChanges();
       if(this.valid_variants.length && this.valid_variants[0].columns?.length) {
-        this.selectedVariant = this.valid_variants[0].columns[0];
+        this.updateColumnSelection({"value": this.valid_variants[0].columns[0]})
       }
     })
   }
@@ -72,6 +72,7 @@ export class SettingsComponent implements OnInit {
     this.selectedVariant = event.value;
     // Get correct Clusters Data
     this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
+    this.dataService.testMiner(this.selectedVariant);
   }
 
 

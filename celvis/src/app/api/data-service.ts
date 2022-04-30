@@ -1,9 +1,21 @@
 import {Injectable} from '@angular/core';
-import {QueryStringParameters} from "./query-string-parameters";
 import {ApiEndpointsService} from "./api-endpoints.service";
 import {ApiHttpService} from "./ApiHttpService";
 import {BehaviorSubject} from "rxjs";
 import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
+
+declare var Pm4JS: any;
+declare var FrequencyDfg: any;
+declare var ProcessTreeVanillaVisualizer: any;
+declare var ProcessTree: any;
+declare var ProcessTreeOperator: any;
+declare var ProcessTreeToPetriNetConverter: any;
+
+// @ts-ignore
+// var util = require('util'),  graphviz = require('graphviz');
+declare var util: any;
+declare var graphviz: any;
+
 
 /**
  * Service which can Create API-Endpoints which then can be used inside the components
@@ -46,6 +58,35 @@ export class DataService {
   public data_service_batch = (): string => this.apiEndpoint.createUrl('analysis/' + this.dataset_key + '/data_service_batch', false);
 
 
+  testMiner(selectedVar: any) {
+    if (!selectedVar.isActivityColumn) return;
+    console.log(selectedVar)
+    const body = this.apiEndpoint.createInductiveMiner(selectedVar.parentName, selectedVar.name);
+
+
+    console.log(this.data_service_batch());
+    console.log(body);
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      const vertex_properties = data.results[0].result.components[0].results[0];
+      const edge_properties = data.results[0].result.components[0].results[1];
+
+      console.log("ASDF ", vertex_properties);
+      console.log("ASDF ", edge_properties);
+
+      let test = new ProcessTree(null, ProcessTreeOperator.SEQUENCE, "abc");
+      let processTree = ProcessTreeVanillaVisualizer.apply(test);
+      // let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(processTree);
+      console.log(processTree);
+
+
+      let gv = ProcessTreeVanillaVisualizer.apply(data.results[0].result.components[0]);
+      console.log(gv);
+
+      console.log(new FrequencyDfg(vertex_properties.data, {}, {}, {}));
+      // let freqDfg = new FrequencyDfg(activities, startActivities, endActivities, pathsFrequency)
+
+    })
+  }
 
 
   /**
@@ -70,7 +111,7 @@ export class DataService {
 
   getPlainData(tableName: string, columnName: string, formula: string | undefined = undefined) {
     let query = "";
-    if(formula) {
+    if (formula) {
       query = formula;
     } else {
       query = "\"" + tableName + "\".\"" + columnName + "\"";
@@ -108,8 +149,8 @@ export class DataService {
       // If we got a response, process it accordingly
       const constructed_table: any = [];
       response.tables.forEach((table: any) => {
-        if(table.id === this.caseTableId) this.caseTableName = table.name;
-        if(table.id === this.activityTableId) this.activityTableName = table.name;
+        if (table.id === this.caseTableId) this.caseTableName = table.name;
+        if (table.id === this.activityTableId) this.activityTableName = table.name;
         const table_obj: any = {
           "name": table.name,
           "shortName": table.shortName,
@@ -136,11 +177,11 @@ export class DataService {
       let reduced_options: any[] = [];
       constructed_table.forEach((o: any) => {
         o.columns.forEach((c: any) => {
-          if(c.isActivityColumn) {
+          if (c.isActivityColumn) {
             console.log(c);
 
             const index = reduced_options.findIndex(e => e.id = c.parentName);
-            if(index === -1) {
+            if (index === -1) {
               reduced_options.push(o);
               o.columns = [];
             }

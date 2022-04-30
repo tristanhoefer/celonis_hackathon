@@ -56,6 +56,29 @@ export class ApiEndpointsService {
     }
   }
 
+  createInductiveMiner(tableName: string, columnName: string, threshold: number = 0.2) {
+    return {
+      "variables": [],
+      "requests": [
+        {
+          "id": "fb554a5e-f245-4d09-a451-69a0a3d8addb",
+          "request": {
+            "commands": [
+              {
+                "computationId": 0,
+                "queries": [
+                  "INDUCTIVE_MINER (\"" + tableName + "\".\"" + columnName + "\", " + threshold + ")"
+                ]
+              }
+            ]
+          }
+        },
+      ],
+      "version": 1
+    }
+
+  }
+
   /**
    * Create a URL by concatenating the endpoint with the action
    * Example-URL to create: URL/asdf1234
