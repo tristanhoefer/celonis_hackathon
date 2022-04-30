@@ -25,6 +25,10 @@
 .box {
   display: flex;
   justify-content: space-between;
+
+  .box-item {
+    width: calc(50% - 1rem);
+  }
 }
 
 .boxes {
