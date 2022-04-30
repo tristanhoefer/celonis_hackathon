@@ -1,6 +1,6 @@
 .slider {
   margin-left: 50px;
-  margin-right: 50px;
+  margin-right: 400px;
 }
 
 .settings {
@@ -11,4 +11,9 @@
 .padding {
   padding-left: 5rem;
   margin-top: 5px;
+  display: flex;
+}
+
+.left-padding {
+  margin-left: 20px;
 }
