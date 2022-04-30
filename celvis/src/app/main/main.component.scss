@@ -51,6 +51,7 @@
   }
 
   .double-card .card {
+    max-height: 50vh;
     width: calc(50% - 0.5 * var(--margin));
   }
 

@@ -4,8 +4,8 @@ import {ApiHttpService} from "./ApiHttpService";
 import {BehaviorSubject} from "rxjs";
 import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
 
-declare var Pm4JS: any;
-declare var FrequencyDfg: any;
+declare var PetriNetVanillaVisualizer: any;
+declare var ProcessTreeToPetriNetConverter: any;
 declare var ProcessTreeVanillaVisualizer: any;
 declare var ProcessTree: any;
 declare var ProcessTreeOperator: any;
@@ -109,7 +109,13 @@ export class DataService {
 
       const final_tree = tmp_map.get(0);
       let processTree = ProcessTreeVanillaVisualizer.apply(final_tree);
-      d3.select("#graph").graphviz().renderDot(processTree);
+      d3.select("#processTree").graphviz().renderDot(processTree);
+
+      console.log(final_tree);
+      let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(final_tree);
+      let petriNet = PetriNetVanillaVisualizer.apply(acceptingPetriNet)
+      console.log(petriNet);
+      d3.select('#petriNet').graphviz().renderDot(petriNet)
     })
   }
 
