@@ -7,6 +7,7 @@
   }
 }
 
+
 .color-test2 {
   background-color: var(--bg-lightest-grayish-blue);
   color: var(--default-text-color);
@@ -20,6 +21,18 @@
     background-color: var(--color-gray-lightest);
   }
 }
+
+.box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.boxes {
+  padding-top: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
 
 .color-test1, .color-test2, .color-test3 {
   padding: .5rem 1rem;

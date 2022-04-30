@@ -18,6 +18,7 @@ import {SettingsComponent} from './settings/settings.component';
 import {SliderModule} from "primeng/slider";
 import {HeaderComponent} from './header/header.component';
 import {InputTextModule} from "primeng/inputtext";
+import { CardComponent } from './card/card.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {InputTextModule} from "primeng/inputtext";
     MainComponent,
     PlotlyChartComponent,
     SettingsComponent,
-    HeaderComponent
+    HeaderComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,
