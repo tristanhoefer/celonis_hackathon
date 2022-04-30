@@ -7,7 +7,7 @@ html {
   // Define Custom Properties
   --font-family: Arial, Helvetica, sans-serif;
 
-  body {background-color: rgb(233, 233, 233);}
+  body {background-color: rgb(233, 233, 233); overflow-x: hidden;}
 
   // Font Properties
   --fw-bold: 700;
