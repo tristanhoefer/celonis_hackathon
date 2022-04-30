@@ -5,9 +5,10 @@
   <h1>Settings</h1>
 
   <div class="row">
-    <p class="explanation">Select Data:</p>
+    <h5 class="explanation">Select Data:</h5>
     <!-- Select Dataset -->
     <div class="selection">
+      <div class="">
       <span class="p-float-label">
         <p-cascadeSelect [options]="tree" optionLabel="name" optionGroupLabel="name"
                          inputId="dataSelectID"
@@ -17,7 +18,8 @@
         ></p-cascadeSelect>
         <label for="dataSelectID">Select Dataset</label>
       </span>
-      <div class="left-padding">
+      </div>
+      <div class="">
         <!-- Select Correct Table & Column Entry -->
         <span class="p-float-label second-child" *ngIf="valid_variants?.length">
               <p-cascadeSelect #csTmp
@@ -36,9 +38,20 @@
 
   <!-- Cluster Settings  -->
   <div class="row">
-    <p class="explanation">Select Data:</p>
-    <div class="selection">
-
+    <h5 class="explanation">Select Data:</h5>
+    <div class="selection slider">
+      <div class="slider-wrapper">
+        <p class="slider-header">Min Pts Value: </p>
+        <input type="text" pInputText [(ngModel)]="min_pts_val"/>
+        <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max"
+                  (onSlideEnd)="updateSliderMinPts()"></p-slider>
+      </div>
+      <div class="slider-wrapper">
+        <p class="slider-header">Estimated Number of Clusters: </p>
+        <input type="text" pInputText [(ngModel)]="no_clusters_val"/>
+        <p-slider [(ngModel)]="no_clusters_val" [min]="no_clusters_min" [max]="no_clusters_max"
+                  (onSlideEnd)="updateSliderClusters()"></p-slider>
+      </div>
     </div>
   </div>
 </div>
@@ -46,19 +59,5 @@
 
 <!-- Slider for the Cluster -->
 <div class="slider">
-  <h5>Min Pts Value: </h5>
-  <input type="text" pInputText [(ngModel)]="min_pts_val"/>
-  <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max"
-            (onSlideEnd)="updateSliderMinPts()"></p-slider>
-
-  <h5>Estimated Number of Clusters: </h5>
-  <input type="text" pInputText [(ngModel)]="no_clusters_val"/>
-  <p-slider [(ngModel)]="no_clusters_val" [min]="no_clusters_min" [max]="no_clusters_max"
-            (onSlideEnd)="updateSliderClusters()"></p-slider>
 </div>
-
-
-<!-- Temporarily print out the uniquely found clusters -->
-Found Clusters:
-{{unique_clusters | json}}
 

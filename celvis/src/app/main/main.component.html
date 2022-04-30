@@ -7,25 +7,32 @@
   <!--<h1>CelVis</h1> -->
   <div class="boxes">
     <div class="double-card">
-      <div class="card">
+      <p-fieldset legend="Case Distribution" [toggleable]="true" [collapsed]="true" [class]="'new-double-card'">
         <app-piechart></app-piechart>
-      </div>
-      <div class="card">
+      </p-fieldset>
+      <p-fieldset legend="Case Details" [toggleable]="true" [collapsed]="true" [class]="'new-double-card'">
         <characteristic-values></characteristic-values>
-      </div>
+      </p-fieldset>
     </div>
 
-    <div class="double-card">
-      <div class="card" id="processTree"></div>
-      <div class="card" id="petriNet"></div>
+    <div class="single-card">
+      <p-fieldset legend="Inductive Miner" [toggleable]="true" [collapsed]="true"
+                  [class]="'new-card process-tree-wrapper'">
+        <div class="card" id="processTree"></div>
+      </p-fieldset>
     </div>
 
+    <div class="single-card">
+      <p-fieldset legend="Petri Net" [toggleable]="true" [collapsed]="true" [class]="'new-card process-tree-wrapper'">
+        <div class="card" id="petriNet"></div>
+      </p-fieldset>
+    </div>
 
-    <div class="full-width-card">
-      <div class="card">
-        <h1>Test Plot</h1>
+    <div class="single-card">
+      <p-fieldset legend="Scatter Plot" [toggleable]="true" [collapsed]="true"
+                  [class]="'new-card process-tree-wrapper'">
         <plotly-chart></plotly-chart>
-      </div>
+      </p-fieldset>
     </div>
   </div>
 

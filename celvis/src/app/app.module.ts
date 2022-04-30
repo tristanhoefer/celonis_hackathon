@@ -21,6 +21,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {MultiSelectModule} from "primeng/multiselect";
 import {PlotlyPiechartComponent} from "./plotly-piechart/plotly-piechart.component";
 import { CharacteristicValuesComponent } from './characteristic-values/characteristic-values.component';
+import {FieldsetModule} from "primeng/fieldset";
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { CharacteristicValuesComponent } from './characteristic-values/character
     FormsModule,
     SliderModule,
     InputTextModule,
-    MultiSelectModule
+    MultiSelectModule,
+    FieldsetModule
   ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]

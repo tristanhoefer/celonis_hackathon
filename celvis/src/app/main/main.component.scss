@@ -28,11 +28,25 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  padding: 30px;
-  margin: var(--margin);
+  margin-top: 2rem;
+  //padding: 30px;
+  //margin: var(--margin);
 
   > * {
     width: 100%;
+  }
+
+  .new-card {
+    width: 100%;
+  }
+
+  .new-double-card {
+    width: calc(50% - 0.5 * var(--margin));
+  }
+
+  .process-tree-wrapper {
+    max-height: 70vh;
+    overflow: hidden;
   }
 
   .card {
@@ -41,13 +55,16 @@
     width: 100%;
     border: 1px solid rgb(252, 252, 252) ;
     border-radius: 20px;
+  }
+
+  .double-card, .single-card {
+    margin-bottom: var(--margin);
     overflow: hidden;
   }
 
   .double-card {
     justify-content: space-between;
     display: flex;
-    margin-bottom: var(--margin);
   }
 
   .double-card .card {

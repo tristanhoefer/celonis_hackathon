@@ -53,7 +53,6 @@ export class DataService {
   clusterEstimateSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
-
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
   }
 
@@ -77,7 +76,7 @@ export class DataService {
       let tmp_map: Map<any, any> = new Map();
       vertex_data.forEach((value: any, index: number) => {
         let operator: any = undefined;
-        switch(value[0]) {
+        switch (value[0]) {
           case 0:
             operator = "tau"
             break;
@@ -108,11 +107,31 @@ export class DataService {
 
       const final_tree = tmp_map.get(0);
       let processTree = ProcessTreeVanillaVisualizer.apply(final_tree);
-      d3.select("#processTree").graphviz().renderDot(processTree);
+      d3.select("#processTree").graphviz().renderDot(processTree, () => {
+        const svg = document.getElementById('processTree')?.getElementsByTagName("svg");
+        if (svg) {
+          const svg_array = Array.from(svg);
+          if (svg_array.length) {
+            const svg_elem = svg_array[0];
+            svg_elem.setAttribute("width", String((window.innerWidth - 120)));
+            svg_elem.setAttribute("height", "400");
+          }
+        }
+      });
 
       let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(final_tree);
       let petriNet = PetriNetVanillaVisualizer.apply(acceptingPetriNet)
-      d3.select('#petriNet').graphviz().renderDot(petriNet)
+      d3.select('#petriNet').graphviz().renderDot(petriNet, () => {
+        const svg = document.getElementById('petriNet')?.getElementsByTagName("svg");
+        if (svg) {
+          const svg_array = Array.from(svg);
+          if (svg_array.length) {
+            const svg_elem = svg_array[0];
+            svg_elem.setAttribute("width", String((window.innerWidth - 120)));
+            svg_elem.setAttribute("height", "400");
+          }
+        }
+      });
     })
   }
 
@@ -130,14 +149,14 @@ export class DataService {
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
 
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
-      if(!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
+      if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
       this.clusters = data.results[0].result.components[0].results[0];
       this.clusterSub.next(data.results[0].result.components[0].results[0]);
 
-      if(!this.clusters.data.length) return;
+      if (!this.clusters.data.length) return;
       const arr = this.convert_2d_to_1d_array(this.clusters.data);
       let counts: any = [];
-      for(let i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         counts[arr[i]] = 1 + (counts[arr[i]] || 0);
       }
 
@@ -145,21 +164,21 @@ export class DataService {
       this.clusterInformalDataSub.next(counts);
     })
   }
+
   clusterInformalData: any[] = [];
   clusterInformalDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
-  getClustersEstimates(tableName: string, columnName: string, epsilon: number = 2,  numberOfValues: number = 100, recursion_depth: number = 5) {
+  getClustersEstimates(tableName: string, columnName: string, epsilon: number = 2, numberOfValues: number = 100, recursion_depth: number = 5) {
     const query = "ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + epsilon + ", " + numberOfValues + ", " + recursion_depth + ") \nAS \"New Expression\"\n"
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
 
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       const a = data.results[0].result.components[0].results[0];
-      const content= this.convert_2d_to_1d_array(a.data);
+      const content = this.convert_2d_to_1d_array(a.data);
       this.clusterEstimateSub.next(content);
     })
   }
-
 
 
   getPlainData(tableName: string, columnName: string, formula: string | undefined = undefined) {
@@ -173,7 +192,7 @@ export class DataService {
     return this.apiHttpService.post(this.data_service_batch(), body);
   }
 
-  getVariantCount(){
+  getVariantCount() {
     const query = "COUNT ( KPI(\"Process variants\"))"
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     return this.apiHttpService.post(this.data_service_batch(), body);
@@ -301,12 +320,14 @@ export class DataService {
 
 
   clickedIdSub: BehaviorSubject<any> = new BehaviorSubject(-5);
+
   setClickedId(id: number) {
     this.clickedIdSub.next(id)
   }
 
 
   clusterSizeSub: BehaviorSubject<any> = new BehaviorSubject(-5);
+
   setClusterSize(size: number) {
     this.clusterSizeSub.next(size)
   }
