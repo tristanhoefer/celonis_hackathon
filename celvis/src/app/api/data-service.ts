@@ -19,6 +19,7 @@ export class DataService {
 
   // Data object with current data queried from the API
   tableAndCol: any = {};
+  valid_variants: any = {};
   tableAndColSub: BehaviorSubject<any> = new BehaviorSubject([]);
   caseTableId: string = "";
   activityTableId: string = "";
@@ -116,18 +117,38 @@ export class DataService {
           "columns": []
         };
 
+        const activityColumnId = table.tableConfiguration?.activityColumnId || ""
         table.columns.forEach((col: any) => {
           const col_obj: any = {
             "parentName": table.name,
             "name": col.name,
             "shortName": col.shortName,
-            "id": col.id
+            "id": col.id,
+            "isActivityColumn": (col.id === activityColumnId)
           };
           table_obj.columns.push(col_obj);
         })
 
         constructed_table.push(table_obj);
       })
+
+      // GET VALID VARIANTS:
+      let reduced_options: any[] = [];
+      constructed_table.forEach((o: any) => {
+        o.columns.forEach((c: any) => {
+          if(c.isActivityColumn) {
+            console.log(c);
+
+            const index = reduced_options.findIndex(e => e.id = c.parentName);
+            if(index === -1) {
+              reduced_options.push(o);
+              o.columns = [];
+            }
+            o.columns.push(c);
+          }
+        })
+      })
+      this.valid_variants = reduced_options;
 
       // CREATE STANDARD PROCESS DIMENSIONS MANUALLY
       const standard_process_dims_table_name = "Standard Process Dimensions";

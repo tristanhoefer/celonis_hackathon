@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {DataService} from "../api/data-service";
 import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
+import {CascadeSelectModule} from "primeng/cascadeselect";
 
 @Component({
   selector: 'settings',
@@ -14,8 +15,8 @@ export class SettingsComponent implements OnInit {
   tree: any = [];
 
   // Store Selected Table (and all tables of the selected dataset)
-  selectedTable: any = {};
-  tables: any = [];
+  selectedVariant: any = {};
+  valid_variants: any = [];
 
   // Value, Min and Max for the min-pts Slider
   min_pts_val: number = 50;
@@ -27,7 +28,9 @@ export class SettingsComponent implements OnInit {
   no_clusters_min: number = 0;
   no_clusters_max: number = 10000;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private cdRef: ChangeDetectorRef) { }
+
+  @ViewChild('csTmp') test: TemplateRef<CascadeSelectModule> | undefined = undefined;
 
   ngOnInit(): void {
     this.dataService.getPackage();
@@ -37,16 +40,22 @@ export class SettingsComponent implements OnInit {
       this.tree = data;
     })
 
-    // Subscribe to the Tables
-    this.dataService.tableAndColSub.subscribe((data: any) => {
-      // Update table and col data if we get new one
-      this.tables = data;
-    })
-
     this.dataService.clusterSub.subscribe((data: any) => {
       if(!data.data) return;
       this.unique_clusters = this.dataService.getUniqueValues(this.dataService.convert_2d_to_1d_array(data.data));
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Subscribe to the Tables
+    this.dataService.tableAndColSub.subscribe((data: any) => {
+      // Update table and col data if we get new one
+      this.valid_variants = this.dataService.valid_variants;
+      this.cdRef.detectChanges();
+      if(this.valid_variants.length && this.valid_variants[0].columns?.length) {
+        this.selectedVariant = this.valid_variants[0].columns[0];
+      }
+    })
   }
 
   // Only for illustrative purposes, delete later...
@@ -60,14 +69,14 @@ export class SettingsComponent implements OnInit {
   }
 
   updateColumnSelection(event: any) {
-    this.selectedTable = event.value;
+    this.selectedVariant = event.value;
     // Get correct Clusters Data
-    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.min_pts_val);
+    this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
   }
 
 
   updateSlider() {
-    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.min_pts_val);
+    this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
     // Get new Clusters
   }
 }
