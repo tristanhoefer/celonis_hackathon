@@ -17,6 +17,7 @@ export class SettingsComponent implements OnInit {
   // Store Selected Table (and all tables of the selected dataset)
   selectedVariant: any = {};
   valid_variants: any = [];
+  variant_data: any = [];
 
   // Value, Min and Max for the min-pts Slider
   min_pts_val: number = 20;
@@ -100,6 +101,7 @@ export class SettingsComponent implements OnInit {
     if(!this.exclusion_token){
       this.exclusion_token = true;
       this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
+      this.dataService.getVariant("A_Create Application");
       const data: number[] = this.no_cluster_data
       if(!data.length) {
         this.exclusion_token = false;
@@ -116,6 +118,7 @@ export class SettingsComponent implements OnInit {
     if(!this.exclusion_token){
       this.exclusion_token = true;
       this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.no_cluster_data[this.no_clusters_val-1]);
+      this.dataService.getVariant("A_Create Application");
       this.min_pts_val = this.no_cluster_data[this.no_clusters_val-1]
       this.exclusion_token = false;
     }

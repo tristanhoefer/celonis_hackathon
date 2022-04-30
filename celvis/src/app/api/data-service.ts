@@ -50,6 +50,9 @@ export class DataService {
   // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
   clusterSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
+  //save variants from pql call
+  variants: any = {};
+
   clusterEstimateSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
@@ -165,6 +168,22 @@ export class DataService {
     })
   }
 
+  getVariant(variantName: string) {
+    const query = "MATCH_ACTIVITIES ( \"BPI2017_application_xes\".\"concept:name\", NODE [" + variantName + "] )";
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
+
+      this.variants = data.results[0].result.components[0].results[0];
+
+      console.log("Tristan: " + this.variants);
+
+
+
+
+  })
+  }
+
   clusterInformalData: any[] = [];
   clusterInformalDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
@@ -196,6 +215,7 @@ export class DataService {
     const query = "COUNT ( KPI(\"Process variants\"))"
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     return this.apiHttpService.post(this.data_service_batch(), body);
+
   }
 
   // Get an Array of Unique Values from an Array of Values
