@@ -21,6 +21,8 @@ export class ApiEndpointsService {
   constructor(private constants: Constants) {
   }
 
+  // INDUCTIVE_MINER (activity_column) 0.2
+
   /**
    * Pass a valid PQL-query string into this function and you can pass the return of this
    * into the POST-Request so that you get the correct results
