@@ -38,6 +38,13 @@ export class SettingsComponent implements OnInit {
     this.dataService.treeSub.subscribe((data: any) => {
       // Update tree data if we get new one
       this.tree = data;
+
+      this.loadTree({value: {
+          "key": "bpi-2017-niklas",
+          "name": "BPI-2017 Niklas",
+          "parentNodeKey": "29a19f6a-dc36-42c2-8f6c-3afd97cd2d2d",
+          "id": "75209638-ba94-4651-bc5c-7bc0a107a8d4"
+        }})
     })
 
     this.dataService.clusterSub.subscribe((data: any) => {

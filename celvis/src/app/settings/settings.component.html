@@ -10,6 +10,7 @@
   <span class="p-float-label">
     <p-cascadeSelect [options]="tree" optionLabel="name" optionGroupLabel="name"
                      inputId="dataSelectID"
+                     [(ngModel)]="selectedTree"
                      [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
                      (onChange)="loadTree($event)"
     ></p-cascadeSelect>

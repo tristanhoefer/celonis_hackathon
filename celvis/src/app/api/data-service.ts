@@ -62,12 +62,9 @@ export class DataService {
 
   testMiner(selectedVar: any) {
     if (!selectedVar.isActivityColumn) return;
-    console.log(selectedVar)
     const body = this.apiEndpoint.createInductiveMiner(selectedVar.parentName, selectedVar.name);
 
 
-    console.log(this.data_service_batch());
-    console.log(body);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       const vertex_properties = data.results[0].result.components[0].results[0];
       const edge_properties = data.results[0].result.components[0].results[1];
@@ -111,10 +108,9 @@ export class DataService {
       let processTree = ProcessTreeVanillaVisualizer.apply(final_tree);
       d3.select("#processTree").graphviz().renderDot(processTree);
 
-      console.log(final_tree);
       let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(final_tree);
       let petriNet = PetriNetVanillaVisualizer.apply(acceptingPetriNet)
-      console.log(petriNet);
+      // console.log(petriNet);
       d3.select('#petriNet').graphviz().renderDot(petriNet)
     })
   }
