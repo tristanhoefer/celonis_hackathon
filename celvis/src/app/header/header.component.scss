@@ -4,11 +4,16 @@ header {
   color: var(--menu-text-color);
   display: flex;
   align-items: center;
-  padding: 12px 0;
+  padding: 10px 0;
 }
+
 
 .headerspace {
   margin: 0 0 0 25px;
+}
+
+.header_comment {
+  margin: 50px 0 0 0;
 }
 
 .logo {
