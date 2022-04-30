@@ -36,7 +36,7 @@ export class PlotlyChartComponent implements OnInit {
    * Load the X-Data for the selected Column
    */
   getXData() {
-    this.dataService.getPlainData(this.xAxisSelection.parentName, this.xAxisSelection.name).subscribe((data: any) => {
+    this.dataService.getPlainData(this.xAxisSelection.parentName, this.xAxisSelection.name, this.xAxisSelection?.formula).subscribe((data: any) => {
       const res = data.results[0].result.components[0].results[0];
       const raw_data = this.dataService.convert_2d_to_1d_array(res.data);
       this.xAxisIds = this.dataService.convert_2d_to_1d_array(res.ids);
@@ -49,7 +49,7 @@ export class PlotlyChartComponent implements OnInit {
    * Load the Y-Data for the selected Column
    */
   getYData() {
-    this.dataService.getPlainData(this.yAxisSelection.parentName, this.yAxisSelection.name).subscribe((data: any) => {
+    this.dataService.getPlainData(this.yAxisSelection.parentName, this.yAxisSelection.name, this.yAxisSelection?.formula).subscribe((data: any) => {
       const res = data.results[0].result.components[0].results[0];
       const raw_data = this.dataService.convert_2d_to_1d_array(res.data);
       this.yAxisData = raw_data;

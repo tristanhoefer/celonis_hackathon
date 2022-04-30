@@ -20,6 +20,10 @@ export class DataService {
   // Data object with current data queried from the API
   tableAndCol: any = {};
   tableAndColSub: BehaviorSubject<any> = new BehaviorSubject([]);
+  caseTableId: string = "";
+  activityTableId: string = "";
+  caseTableName: string = "";
+  activityTableName: string = "";
 
   // Data object with current data queried from the API
   tree: any = {};
@@ -47,6 +51,7 @@ export class DataService {
    * Get the Clustering for
    * @param tableName TableName to Query
    * @param columnName ColumnName to Query
+   * @param formula
    * @param minPts
    * @param epsilon
    */
@@ -60,9 +65,15 @@ export class DataService {
     })
   }
 
-  getPlainData(tableName: string, columnName: string) {
-    const query = "\"" + tableName + "\".\"" + columnName + "\"";
+  getPlainData(tableName: string, columnName: string, formula: string | undefined = undefined) {
+    let query = "";
+    if(formula) {
+      query = formula;
+    } else {
+      query = "\"" + tableName + "\".\"" + columnName + "\"";
+    }
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+    console.log("QUERY: ", body)
 
 
     return this.apiHttpService.post(this.data_service_batch(), body);
@@ -87,16 +98,22 @@ export class DataService {
   getTablesAndColumns() {
     const url = this.getDataModelFromAPI()
     this.apiHttpService.get(url).subscribe((response: any) => {
+      console.log(response);
+      this.caseTableId = response.caseTableId;
+      this.activityTableId = response.activityTableId;
+
       // If we got a response, process it accordingly
       const constructed_table: any = [];
       response.tables.forEach((table: any) => {
+        if(table.id === this.caseTableId) this.caseTableName = table.name;
+        if(table.id === this.activityTableId) this.activityTableName = table.name;
         const table_obj: any = {
           "name": table.name,
           "shortName": table.shortName,
-          "id": table.id
+          "id": table.id,
+          "columns": []
         };
 
-        table_obj.columns = [];
         table.columns.forEach((col: any) => {
           const col_obj: any = {
             "parentName": table.name,
@@ -109,6 +126,54 @@ export class DataService {
 
         constructed_table.push(table_obj);
       })
+
+      // CREATE STANDARD PROCESS DIMENSIONS MANUALLY
+      const standard_process_dims_table_name = "Standard Process Dimensions";
+      const standard_process_dims_table: any = {
+        "name": standard_process_dims_table_name,
+        "shortName": standard_process_dims_table_name,
+        "id": "standard_process_dimensions",
+        "columns": [
+          {
+            "parentName": standard_process_dims_table_name,
+            "name": "Eventtime in Years",
+            "shortName": "Eventtime in Years",
+            "formula": "ROUND_YEAR(\"" + this.activityTableName + "\".\"time:timestamp\")"
+          },
+          {
+            "parentName": standard_process_dims_table_name,
+            "name": "Eventtime in Months",
+            "shortName": "Eventtime in Months",
+            "formula": "ROUND_MONTH(\"" + this.activityTableName + "\".\"time:timestamp\")"
+          },
+          {
+            "parentName": standard_process_dims_table_name,
+            "name": "Timestamp of first activity",
+            "shortName": "Timestamp of first activity",
+            "formula": "ROUND_DAY (PU_FIRST(\"" + this.caseTableName + "\", \"" + this.activityTableName + "\".\"time:timestamp\"))"
+          },
+          {
+            "parentName": standard_process_dims_table_name,
+            "name": "Timestamp of last activity",
+            "shortName": "Timestamp of last activity",
+            "formula": "ROUND_DAY (PU_LAST(\"" + this.caseTableName + "\", \"" + this.activityTableName + "\".\"time:timestamp\"))"
+          },
+          {
+            "parentName": standard_process_dims_table_name,
+            "name": "Total Throughputtime in Days",
+            "shortName": "Total Throughputtime in Days",
+            "formula": "CALC_THROUGHPUT(ALL_OCCURRENCE['Process Start'] TO ALL_OCCURRENCE['Process End'], REMAP_TIMESTAMPS(\"" + this.activityTableName + "\".\"time:timestamp\", DAYS))"
+          },
+          {
+            "parentName": standard_process_dims_table_name,
+            "name": "Variants",
+            "shortName": "Variants",
+            "formula": " KPI(\"Process variants\")"
+          },
+        ]
+      }
+
+      constructed_table.unshift(standard_process_dims_table)
 
       // Trigger Table Changes
       this.tableAndCol = constructed_table;

@@ -16,8 +16,11 @@ Settings Menu
 
 <!-- Slider for the Cluster -->
 <div class="slider">
-  <input type="text" pInputText [(ngModel)]="val"/>
-  <p-slider [(ngModel)]="val" [min]="min" [max]="max" (onSlideEnd)="updateSlider()"></p-slider>
+  <input type="text" pInputText [(ngModel)]="min_pts_val"/>
+  <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max" (onSlideEnd)="updateSlider()"></p-slider>
+
+  <input type="text" pInputText [(ngModel)]="no_clusters_val"/>
+  <p-slider [(ngModel)]="no_clusters_val" [min]="no_clusters_min" [max]="no_clusters_max" (onSlideEnd)="updateSlider()"></p-slider>
 </div>
 
 

@@ -17,10 +17,15 @@ export class SettingsComponent implements OnInit {
   selectedTable: any = {};
   tables: any = [];
 
-  // Value, Min and Max for the Slider
-  val: number = 50;
-  min: number = 0;
-  max: number = 10000;
+  // Value, Min and Max for the min-pts Slider
+  min_pts_val: number = 50;
+  min_pts_min: number = 0;
+  min_pts_max: number = 10000;
+
+  // Value, Min and Max for the min-pts Slider
+  no_clusters_val: number = 50;
+  no_clusters_min: number = 0;
+  no_clusters_max: number = 10000;
 
   constructor(private dataService: DataService) { }
 
@@ -55,12 +60,12 @@ export class SettingsComponent implements OnInit {
 
   updateColumnSelection() {
     // Get correct Clusters Data
-    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.val);
+    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.selectedTable?.formula, this.min_pts_val);
   }
 
 
   updateSlider() {
     // Get new Clusters
-    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.val);
+    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.selectedTable?.formula, this.min_pts_val);
   }
 }
