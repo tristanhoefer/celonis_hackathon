@@ -52,13 +52,15 @@ export class SettingsComponent implements OnInit {
   // Only for illustrative purposes, delete later...
   unique_clusters: any = {};
 
-  loadTree() {
+  loadTree(event: any) {
     // Get all Tables from the Dataset
+    this.selectedTree = event.value;
     this.dataService.dataset_key = this.selectedTree.id;
     this.dataService.getTablesAndColumns();
   }
 
-  updateColumnSelection() {
+  updateColumnSelection(event: any) {
+    this.selectedTable = event.value;
     // Get correct Clusters Data
     this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.selectedTable?.formula, this.min_pts_val);
   }

@@ -4,19 +4,24 @@
   <!-- Select Dataset -->
   <div class="padding">
   <span class="p-float-label">
-    <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name"
+    <p-cascadeSelect [options]="tree" optionLabel="name" optionGroupLabel="name"
                      inputId="dataSelectID"
                      [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
-                     (onChange)="loadTree()"
+                     (onChange)="loadTree($event)"
     ></p-cascadeSelect>
     <label for="dataSelectID">Select Dataset</label>
   </span>
 
     <!-- Select Correct Table & Column Entry -->
-    <p-cascadeSelect [(ngModel)]="selectedTable" [options]="tables" optionLabel="name" optionGroupLabel="name"
+    <span class="p-float-label">
+
+    <p-cascadeSelect [options]="tables" optionLabel="name" optionGroupLabel="name"
+                     inputId="tableSelectId"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                     (onChange)="updateColumnSelection()" *ngIf="tables?.length"
-                     placeholder="Select Column"></p-cascadeSelect>
+                     (onChange)="updateColumnSelection($event)" *ngIf="tables?.length">
+                     </p-cascadeSelect>
+    <label for="tableSelectId">Select Column</label>
+  </span>
   </div>
 </div>
 

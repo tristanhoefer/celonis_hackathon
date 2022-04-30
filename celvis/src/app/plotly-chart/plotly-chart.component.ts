@@ -130,16 +130,14 @@ export class PlotlyChartComponent implements OnInit {
 
 
   // Trigger on X-Axis Changes
-  xChange() {
+  xChange(event: any) {
+    this.xAxisSelection = event.value;
     this.getXData();
   }
 
-  test(event: any) {
-    console.log(event);
-  }
-
   // Trigger on Y-Axis Changes
-  yChange() {
+  yChange(event: any) {
+    this.yAxisSelection = event.value;
     this.getYData();
   }
 }

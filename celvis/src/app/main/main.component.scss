@@ -25,9 +25,14 @@
 .box {
   display: flex;
   justify-content: space-between;
+  margin: 1rem;
 
   .box-item {
     width: calc(50% - 1rem);
+  }
+
+  .box-item.full-width {
+    width: 100%;
   }
 }
 

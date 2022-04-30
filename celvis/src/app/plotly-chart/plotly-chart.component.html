@@ -2,19 +2,15 @@
   <div id="myDiv"></div>
 
   <div class="center axis-selector">
-    <span class="p-float-label">
-      <p-cascadeSelect inputId="cascadeSelect" [options]="xAxisOptions" optionLabel="cname" optionGroupLabel="name"
-                       [optionGroupChildren]="['states', 'cities']" (onChange)="test($event)"></p-cascadeSelect>
-      <label for="cascadeSelect">CascadeSelect</label>
-    </span>
+
 
     <!-- X-Axis Selection -->
     <span class="p-float-label">
-      <p-cascadeSelect [(ngModel)]="xAxisSelection" [options]="xAxisOptions" inputId="xAxisID"
+      <p-cascadeSelect [options]="xAxisOptions" inputId="xAxisID"
                        styleClass="xAxisSelect"
                        optionLabel="name" optionGroupLabel="name"
                        [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                       (onChange)="xChange()"
+                       (onChange)="xChange($event)"
       > </p-cascadeSelect>
         <label for="xAxisID">Select xAxis</label>
     </span>
@@ -22,11 +18,11 @@
     </div>
     <!-- Y-Axis Selection -->
     <span class="p-float-label">
-    <p-cascadeSelect [(ngModel)]="yAxisSelection" [options]="yAxisOptions" inputId="yAxisID"
+    <p-cascadeSelect [options]="yAxisOptions" inputId="yAxisID"
                      styleClass="yAxisSelect"
                      optionLabel="name" optionGroupLabel="name"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                     (onChange)="yChange()"
+                     (onChange)="yChange($event)"
     ></p-cascadeSelect>
       <label for="yAxisID">Select yAxis</label>
     </span>
