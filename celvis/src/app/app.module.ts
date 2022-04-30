@@ -18,7 +18,6 @@ import {SettingsComponent} from './settings/settings.component';
 import {SliderModule} from "primeng/slider";
 import {HeaderComponent} from './header/header.component';
 import {InputTextModule} from "primeng/inputtext";
-import { CardComponent } from './card/card.component';
 import {MultiSelectModule} from "primeng/multiselect";
 
 @NgModule({
@@ -27,22 +26,21 @@ import {MultiSelectModule} from "primeng/multiselect";
     MainComponent,
     PlotlyChartComponent,
     SettingsComponent,
-    HeaderComponent,
-    CardComponent
+    HeaderComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
+  imports: [
+    BrowserModule,
+    HttpClientModule,
 
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        ListboxModule,
-        CascadeSelectModule,
-        FormsModule,
-        SliderModule,
-        InputTextModule,
-        MultiSelectModule
-    ],
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ListboxModule,
+    CascadeSelectModule,
+    FormsModule,
+    SliderModule,
+    InputTextModule,
+    MultiSelectModule
+  ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]
 })
