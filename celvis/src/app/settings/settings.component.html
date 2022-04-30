@@ -31,9 +31,11 @@
 
 <!-- Slider for the Cluster -->
 <div class="slider">
+  <h5>Min Pts Value: </h5>
   <input type="text" pInputText [(ngModel)]="min_pts_val"/>
   <p-slider [(ngModel)]="min_pts_val" [min]="min_pts_min" [max]="min_pts_max" (onSlideEnd)="updateSlider()"></p-slider>
 
+  <h5>Estimated Number of Clusters: </h5>
   <input type="text" pInputText [(ngModel)]="no_clusters_val"/>
   <p-slider [(ngModel)]="no_clusters_val" [min]="no_clusters_min" [max]="no_clusters_max"
             (onSlideEnd)="updateSlider()"></p-slider>

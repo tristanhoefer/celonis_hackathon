@@ -21,7 +21,7 @@ export class PiechartComponent implements OnInit {
   updatePieChart() {
 
     const data  = [{
-      values: [19, 26, 55],
+      values: [19, 26, 6],
       labels: ['Residential', 'Non-Residential', 'Utility'],
       type: 'pie'
     }];
