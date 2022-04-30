@@ -45,7 +45,7 @@ export class ApiEndpointsService {
                 "queries": [
                   "TABLE (" +
                   query +
-                  ")" + limit_string + " " + offset_string
+                  ")"
                 ]
               }
             ]

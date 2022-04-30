@@ -5,5 +5,8 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="d3.v5" level="application" />
+    <orderEntry type="library" name="d3-graphviz" level="application" />
+    <orderEntry type="library" name="@hpcc-js/wasm" level="application" />
   </component>
 </module>

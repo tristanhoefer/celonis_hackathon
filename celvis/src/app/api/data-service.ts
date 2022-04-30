@@ -9,12 +9,14 @@ declare var FrequencyDfg: any;
 declare var ProcessTreeVanillaVisualizer: any;
 declare var ProcessTree: any;
 declare var ProcessTreeOperator: any;
-declare var ProcessTreeToPetriNetConverter: any;
+declare var d3: any;
+
 
 // @ts-ignore
-// var util = require('util'),  graphviz = require('graphviz');
-declare var util: any;
-declare var graphviz: any;
+// var graphviz = require('graphviz');
+
+// Create digraph G
+// var g = graphviz.digraph("G");
 
 
 /**
@@ -70,21 +72,44 @@ export class DataService {
       const vertex_properties = data.results[0].result.components[0].results[0];
       const edge_properties = data.results[0].result.components[0].results[1];
 
-      console.log("ASDF ", vertex_properties);
-      console.log("ASDF ", edge_properties);
+      const vertex_data = vertex_properties.data; // first entry is number from 0 to 5, second is label => ProcessTree
+      const edge_data = edge_properties.data; // first entry is "from" node, second entry is "to" node
 
-      let test = new ProcessTree(null, ProcessTreeOperator.SEQUENCE, "abc");
-      let processTree = ProcessTreeVanillaVisualizer.apply(test);
-      // let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(processTree);
-      console.log(processTree);
+      let tmp_map: Map<any, any> = new Map();
+      vertex_data.forEach((value: any, index: number) => {
+        let operator: any = undefined;
+        switch(value[0]) {
+          case 0:
+            operator = "tau"
+            break;
+          case 1:
+            operator = "";
+            break;
+          case 2:
+            operator = ProcessTreeOperator.EXCLUSIVE_CHOICE;
+            break;
+          case 3:
+            operator = ProcessTreeOperator.SEQUENCE;
+            break;
+          case 4:
+            operator = ProcessTreeOperator.PARALLEL;
+            break;
+          case 5:
+            operator = ProcessTreeOperator.REDO_LOOP;
+            break;
+        }
+        tmp_map.set(index, new ProcessTree(null, operator, value[1]));
+      })
 
+      edge_data.slice().reverse().forEach((value: any, index: number) => {
+        let test = tmp_map.get(value[1]);
+        test.parentNode = tmp_map.get(value[0]);
+        tmp_map.get(value[0]).children.push(test);
+      });
 
-      let gv = ProcessTreeVanillaVisualizer.apply(data.results[0].result.components[0]);
-      console.log(gv);
-
-      console.log(new FrequencyDfg(vertex_properties.data, {}, {}, {}));
-      // let freqDfg = new FrequencyDfg(activities, startActivities, endActivities, pathsFrequency)
-
+      const final_tree = tmp_map.get(0);
+      let processTree = ProcessTreeVanillaVisualizer.apply(final_tree);
+      d3.select("#graph").graphviz().renderDot(processTree);
     })
   }
 
@@ -232,7 +257,7 @@ export class DataService {
             "parentName": standard_process_dims_table_name,
             "name": "Variants",
             "shortName": "Variants",
-            "formula": " KPI(\"Process variants\")"
+            "formula": "KPI(\"Process variants\")"
           },
         ]
       }
