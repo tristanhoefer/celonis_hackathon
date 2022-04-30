@@ -63,6 +63,8 @@ export class PlotlyTestComponent implements OnInit {
     }
     const config = {responsive: true}
     Plotly.newPlot('myDiv', data, layout, config);
+
+    console.log(data);
   }
 
   xAxis: any = {};

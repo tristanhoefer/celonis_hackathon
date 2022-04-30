@@ -189,18 +189,20 @@ export class DataService {
 
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       this.clusters = data.results[0].result.components[0].results[0];
+      this.num_colors = (this.getUniqueValues(this.convert_2d_to_1d_array(this.clusters?.data))?.length || 1)
       this.color= this.convert_2d_to_1d_array(this.clusters.data, this.generateColorByIndex.bind(this));
-      console.log("COLS: ", this.color);
       this.clusterSub.next(data.results[0].result.components[0].results[0]);
     })
   }
+  num_colors: number = 1; // How many numbers ( = Clusters) do we actually have
 
   getUniqueValues(data: any) {
     return ([... new Set(data)])
   }
 
+  // Create contrast-rich color...
   generateColorByIndex(idx: number) {
-    const hue = Math.max(0, idx * (360 / (this.getUniqueValues(this.clusters?.data)?.length || 1)) % 360); // use golden angle approximation
+    const hue = Math.max(0, idx * (360 / this.num_colors) % 360); // use golden angle approximation
     return `hsl(${hue}, 100%, 50%)`;
   }
 
