@@ -4,7 +4,7 @@ header {
   color: var(--menu-text-color);
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px;
 }
 
 
@@ -13,11 +13,19 @@ header {
 }
 
 .header_comment {
-  margin: 50px 0 0 0;
+  margin: 0 0 0 25px;
 }
 
 .logo {
   height: 50px;
   margin: 0 0 0 50px;
 }
+
+.header_text{
+  justify-content:flex-start; 
+  display: flex;
+  flex-direction: column
+
+}
+
 
