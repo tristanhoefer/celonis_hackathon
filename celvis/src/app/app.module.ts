@@ -19,6 +19,7 @@ import {SliderModule} from "primeng/slider";
 import {HeaderComponent} from './header/header.component';
 import {InputTextModule} from "primeng/inputtext";
 import { CardComponent } from './card/card.component';
+import {MultiSelectModule} from "primeng/multiselect";
 
 @NgModule({
   declarations: [
@@ -29,17 +30,19 @@ import { CardComponent } from './card/card.component';
     HeaderComponent,
     CardComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    ListboxModule,
-    CascadeSelectModule,
-    FormsModule,
-    SliderModule,
-    InputTextModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        ListboxModule,
+        CascadeSelectModule,
+        FormsModule,
+        SliderModule,
+        InputTextModule,
+        MultiSelectModule
+    ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]
 })
