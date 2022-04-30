@@ -56,10 +56,12 @@ export class DataService {
    * @param epsilon
    */
   getClusters(tableName: string, columnName: string, minPts: number, epsilon: number = 2) {
-    const query = "CLUSTER_VARIANTS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n"
+    const query = "CLUSTER_VARIANTS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n";
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
 
+    console.log(body);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      console.log(data);
       this.clusters = data.results[0].result.components[0].results[0];
       this.clusterSub.next(data.results[0].result.components[0].results[0]);
     })

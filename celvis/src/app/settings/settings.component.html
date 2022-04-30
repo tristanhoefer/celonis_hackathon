@@ -13,12 +13,11 @@
   </span>
 
     <!-- Select Correct Table & Column Entry -->
-    <span class="p-float-label">
-
+    <span class="p-float-label" *ngIf="tables?.length">
     <p-cascadeSelect [options]="tables" optionLabel="name" optionGroupLabel="name"
                      inputId="tableSelectId"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                     (onChange)="updateColumnSelection($event)" *ngIf="tables?.length">
+                     (onChange)="updateColumnSelection($event)">
                      </p-cascadeSelect>
     <label for="tableSelectId">Select Column</label>
   </span>

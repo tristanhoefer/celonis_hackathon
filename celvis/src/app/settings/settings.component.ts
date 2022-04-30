@@ -62,12 +62,12 @@ export class SettingsComponent implements OnInit {
   updateColumnSelection(event: any) {
     this.selectedTable = event.value;
     // Get correct Clusters Data
-    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.selectedTable?.formula, this.min_pts_val);
+    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.min_pts_val);
   }
 
 
   updateSlider() {
+    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.min_pts_val);
     // Get new Clusters
-    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.selectedTable?.formula, this.min_pts_val);
   }
 }
