@@ -19,14 +19,18 @@ export class SettingsComponent implements OnInit {
   valid_variants: any = [];
 
   // Value, Min and Max for the min-pts Slider
-  min_pts_val: number = 50;
-  min_pts_min: number = 0;
+  min_pts_val: number = 5;
+  min_pts_min: number = 1;
   min_pts_max: number = 10000;
 
   // Value, Min and Max for the min-pts Slider
-  no_clusters_val: number = 50;
-  no_clusters_min: number = 0;
-  no_clusters_max: number = 10000;
+  no_clusters_val: number = 1;
+  no_clusters_min: number = 1;
+  no_clusters_max: number = 50;
+  no_cluster_data: number[] = [];
+
+  // Token for mutual exclusion
+  exclusion_token: boolean = false;
 
   constructor(private dataService: DataService, private cdRef: ChangeDetectorRef) { }
 
@@ -45,6 +49,10 @@ export class SettingsComponent implements OnInit {
           "parentNodeKey": "29a19f6a-dc36-42c2-8f6c-3afd97cd2d2d",
           "id": "75209638-ba94-4651-bc5c-7bc0a107a8d4"
         }})
+
+      this.dataService.getVariantCount().subscribe((data:any)=>{
+        console.log("test" + data);
+      });
     })
 
     this.dataService.clusterSub.subscribe((data: any) => {
@@ -55,6 +63,14 @@ export class SettingsComponent implements OnInit {
       console.log("SUM: ", sum);
       this.unique_clusters = this.dataService.getUniqueValues(this.dataService.convert_2d_to_1d_array(data.data));
     });
+
+    this.dataService.clusterEstimateSub.subscribe((data: any) => {
+      console.log(data.length)
+      if(!data.length) return;
+      this.no_cluster_data = data
+      this.no_clusters_max = data.length
+    });
+
   }
 
   ngAfterViewInit(): void {
@@ -74,6 +90,7 @@ export class SettingsComponent implements OnInit {
 
   loadTree(event: any) {
     // Get all Tables from the Dataset
+    console.log(event.value)
     this.selectedTree = event.value;
     this.dataService.dataset_key = this.selectedTree.id;
     this.dataService.getTablesAndColumns();
@@ -84,11 +101,35 @@ export class SettingsComponent implements OnInit {
     // Get correct Clusters Data
     this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
     this.dataService.testMiner(this.selectedVariant);
+    this.dataService.getClustersEstimates(this.selectedVariant.parentName, this.selectedVariant.name);
+    this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
   }
 
 
-  updateSlider() {
-    this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
-    // Get new Clusters
+  updateSliderMinPts() {
+    if(!this.exclusion_token){
+      this.exclusion_token = true;
+      this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
+      const data: number[] = this.no_cluster_data
+      if(!data.length){
+        console.log("Kek")
+        this.exclusion_token = false;
+        return;
+      }
+      const closestValue: number = data.reduce((prev, curr) => Math.abs(curr - this.min_pts_val) < Math.abs(prev - this.min_pts_val) ? curr : prev);
+      this.no_clusters_val = data.findIndex((d: any) => d == closestValue)
+      console.log(this.no_clusters_val)
+      this.exclusion_token = false;
+    }
+  }
+
+  updateSliderClusters(){
+    if(!this.exclusion_token){
+      this.exclusion_token = true;
+      this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.no_cluster_data[this.no_clusters_val-1]);
+      this.min_pts_val = this.no_cluster_data[this.no_clusters_val-1]
+      this.exclusion_token = false;
+    }
+
   }
 }

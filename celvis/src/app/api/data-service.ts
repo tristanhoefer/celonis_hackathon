@@ -50,6 +50,9 @@ export class DataService {
   // BehaviourSubject watching the data (so we can subscribe to it and can react to changes properly)
   clusterSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
+  clusterEstimateSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
+
 
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
   }
@@ -62,9 +65,12 @@ export class DataService {
 
   testMiner(selectedVar: any) {
     if (!selectedVar.isActivityColumn) return;
+    console.log(selectedVar)
     const body = this.apiEndpoint.createInductiveMiner(selectedVar.parentName, selectedVar.name);
 
 
+    console.log(this.data_service_batch());
+    console.log(body);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       const vertex_properties = data.results[0].result.components[0].results[0];
       const edge_properties = data.results[0].result.components[0].results[1];
@@ -136,6 +142,21 @@ export class DataService {
     })
   }
 
+  getClustersEstimates(tableName: string, columnName: string, epsilon: number = 2,  numberOfValues: number = 100, recursion_depth: number = 5) {
+    const query = "ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + epsilon + ", " + numberOfValues + ", " + recursion_depth + ") \nAS \"New Expression\"\n"
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      const a = data.results[0].result.components[0].results[0];
+      console.log(a);
+      const content= this.convert_2d_to_1d_array(a.data);
+      console.log(data.results[0].result.components[0].results[0]);
+      this.clusterEstimateSub.next(content);
+    })
+  }
+
+
+
   getPlainData(tableName: string, columnName: string, formula: string | undefined = undefined) {
     let query = "";
     if (formula) {
@@ -147,6 +168,13 @@ export class DataService {
     console.log("QUERY: ", body)
 
 
+    return this.apiHttpService.post(this.data_service_batch(), body);
+  }
+
+  getVariantCount(){
+    const query = "COUNT ( KPI(\"Process variants\"))"
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+    console.log("QUERY: ", body)
     return this.apiHttpService.post(this.data_service_batch(), body);
   }
 
