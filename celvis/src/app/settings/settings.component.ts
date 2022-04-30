@@ -49,6 +49,10 @@ export class SettingsComponent implements OnInit {
 
     this.dataService.clusterSub.subscribe((data: any) => {
       if(!data.data) return;
+      console.log("CLUSTERS: ", this.dataService.convert_2d_to_1d_array(data.data));
+      const sum = this.dataService.convert_2d_to_1d_array(data.data).filter(item => item.tax === '25.00')
+        .reduce((sum, current) => sum + current.total, 0);
+      console.log("SUM: ", sum);
       this.unique_clusters = this.dataService.getUniqueValues(this.dataService.convert_2d_to_1d_array(data.data));
     });
   }
