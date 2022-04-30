@@ -37,11 +37,14 @@ export class SettingsComponent implements OnInit {
       this.tables = data;
     })
 
+
     this.dataService.clusterSub.subscribe((data: any) => {
       if(!data.data) return;
-      this.unique_clusters = ([... new Set([].concat(...data.data))]);
+      this.unique_clusters = this.dataService.getUniqueValues(this.dataService.convert_2d_to_1d_array(data.data));
     });
   }
+
+
 
   unique_clusters: any = {};
 

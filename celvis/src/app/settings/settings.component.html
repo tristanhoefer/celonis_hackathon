@@ -1,4 +1,4 @@
-<div class="center-list">
+<div >
   <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name"
                    [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
                    (onChange)="loadTree()"

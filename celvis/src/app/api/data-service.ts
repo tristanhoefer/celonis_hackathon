@@ -158,6 +158,12 @@ export class DataService {
     });
   }
 
+  convert_2d_to_1d_array(data: any, fn?: any) {
+    let arr = [];
+    for(let row of data) for (let e of row) arr.push((fn)? fn(e) : e);
+    return arr;
+  }
+
   getSelectedColData(tableName: string) {
     // const query = "TABLE (DISTINCT\n\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"\n) ORDER BY \"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\" ASC LIMIT 99999"
     const query =  "TABLE ( ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 ) \nAS \"New Expression\") ORDER BY ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"), 2, 20, 5 )\n DESC LIMIT 400 OFFSET 0"
@@ -179,13 +185,66 @@ export class DataService {
   getClusters(tableName: string, minPts: number, epsilon: number = 2) {
     console.log(tableName);
     const query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableName + "\".\"" + this.colName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n"
-    const body = this.apiEndpoint.createPQLQueryBody(query, 100000);
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
 
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       this.clusters = data.results[0].result.components[0].results[0];
+      this.color= this.convert_2d_to_1d_array(this.clusters.data, this.generateColorByIndex.bind(this));
+      console.log("COLS: ", this.color);
       this.clusterSub.next(data.results[0].result.components[0].results[0]);
     })
   }
+
+  getUniqueValues(data: any) {
+    return ([... new Set(data)])
+  }
+
+  generateColorByIndex(idx: number) {
+    const hue = Math.max(0, idx * (360 / (this.getUniqueValues(this.clusters?.data)?.length || 1)) % 360); // use golden angle approximation
+    return `hsl(${hue}, 100%, 50%)`;
+  }
+
+
+  yAxisSelection: any = {};
+  yAxisData: any[] = [];
+  yAxisDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
+  xAxisSelection: any = {};
+  xAxisData: any[] = [];
+  xAxisIds: any[] = [];
+  xAxisDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
+  color: any[] = [];
+
+  readonly LIMIT = 1000;
+  getYData() {
+    const query = "\"" + this.yAxisSelection.parentName + "\".\"" + this.yAxisSelection.name + "\"";
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+
+    console.log(query);
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      const a = this.convert_2d_to_1d_array(data.results[0].result.components[0].results[0].data);
+      this.xAxisIds = this.convert_2d_to_1d_array(data.results[0].result.components[0].results[0].ids);
+      this.yAxisData = a;
+      this.yAxisDataSub.next(a);
+    })
+  }
+
+  getXData() {
+    const query = "\"" + this.xAxisSelection.parentName + "\".\"" + this.xAxisSelection.name + "\"";
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+
+
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+
+      console.log(data.results[0].result.components[0].results[0]);
+      const a = this.convert_2d_to_1d_array(data.results[0].result.components[0].results[0].data);
+      this.xAxisData = a;
+      this.xAxisDataSub.next(a);
+    })
+  }
+
+
 
   getSliderData(tableName: string) {
     // const query = "TABLE (DISTINCT\n\"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\"\n) ORDER BY \"_CEL_P2P_ACTIVITIES_EN_parquet\".\"ACTIVITY_EN\" ASC LIMIT 99999"
