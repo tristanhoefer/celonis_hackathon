@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
   valid_variants: any = [];
 
   // Value, Min and Max for the min-pts Slider
-  min_pts_val: number = 5;
+  min_pts_val: number = 20;
   min_pts_min: number = 1;
   min_pts_max: number = 10000;
 
@@ -57,10 +57,6 @@ export class SettingsComponent implements OnInit {
 
     this.dataService.clusterSub.subscribe((data: any) => {
       if(!data.data) return;
-      console.log("CLUSTERS: ", this.dataService.convert_2d_to_1d_array(data.data));
-      const sum = this.dataService.convert_2d_to_1d_array(data.data).filter(item => item.tax === '25.00')
-        .reduce((sum, current) => sum + current.total, 0);
-      console.log("SUM: ", sum);
       this.unique_clusters = this.dataService.getUniqueValues(this.dataService.convert_2d_to_1d_array(data.data));
     });
 
@@ -68,7 +64,7 @@ export class SettingsComponent implements OnInit {
       console.log(data.length)
       if(!data.length) return;
       this.no_cluster_data = data
-      this.no_clusters_max = data.length
+      this.updateSliderClusters();
     });
 
   }
@@ -90,7 +86,6 @@ export class SettingsComponent implements OnInit {
 
   loadTree(event: any) {
     // Get all Tables from the Dataset
-    console.log(event.value)
     this.selectedTree = event.value;
     this.dataService.dataset_key = this.selectedTree.id;
     this.dataService.getTablesAndColumns();
@@ -99,10 +94,11 @@ export class SettingsComponent implements OnInit {
   updateColumnSelection(event: any) {
     this.selectedVariant = event.value;
     // Get correct Clusters Data
-    this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
+    // this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
     this.dataService.testMiner(this.selectedVariant);
     this.dataService.getClustersEstimates(this.selectedVariant.parentName, this.selectedVariant.name);
-    this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
+    console.log("MIN_PTS: ", this.min_pts_val);
+    // this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
   }
 
 
@@ -111,14 +107,13 @@ export class SettingsComponent implements OnInit {
       this.exclusion_token = true;
       this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
       const data: number[] = this.no_cluster_data
-      if(!data.length){
-        console.log("Kek")
+      if(!data.length) {
         this.exclusion_token = false;
         return;
       }
+
       const closestValue: number = data.reduce((prev, curr) => Math.abs(curr - this.min_pts_val) < Math.abs(prev - this.min_pts_val) ? curr : prev);
       this.no_clusters_val = data.findIndex((d: any) => d == closestValue)
-      console.log(this.no_clusters_val)
       this.exclusion_token = false;
     }
   }

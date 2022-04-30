@@ -134,13 +134,25 @@ export class DataService {
     const query = "CLUSTER_VARIANTS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n";
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
 
-    console.log(body);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
-      console.log(data);
+      if(!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
       this.clusters = data.results[0].result.components[0].results[0];
       this.clusterSub.next(data.results[0].result.components[0].results[0]);
+
+      if(!this.clusters.data.length) return;
+      const arr = this.convert_2d_to_1d_array(this.clusters.data);
+      let counts: any = [];
+      for(let i = 0; i < arr.length; i++) {
+        counts[arr[i]] = 1 + (counts[arr[i]] || 0);
+      }
+
+      this.clusterInformalData = counts;
+      this.clusterInformalDataSub.next(counts);
     })
   }
+  clusterInformalData: any[] = [];
+  clusterInformalDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
+
 
   getClustersEstimates(tableName: string, columnName: string, epsilon: number = 2,  numberOfValues: number = 100, recursion_depth: number = 5) {
     const query = "ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + epsilon + ", " + numberOfValues + ", " + recursion_depth + ") \nAS \"New Expression\"\n"
@@ -299,6 +311,19 @@ export class DataService {
       this.tableAndColSub.next(constructed_table);
     })
   }
+
+
+  clickedIdSub: BehaviorSubject<any> = new BehaviorSubject(-5);
+  setClickedId(id: number) {
+    this.clickedIdSub.next(id)
+  }
+
+
+  clusterSizeSub: BehaviorSubject<any> = new BehaviorSubject(-5);
+  setClusterSize(size: number) {
+    this.clusterSizeSub.next(size)
+  }
+
 
   // Get the available Tree-Options
   getPackage() {

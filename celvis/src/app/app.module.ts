@@ -20,6 +20,7 @@ import {HeaderComponent} from './header/header.component';
 import {InputTextModule} from "primeng/inputtext";
 import {MultiSelectModule} from "primeng/multiselect";
 import {PlotlyPiechartComponent} from "./piechart/plotly-piechart.component";
+import { CharacteristicValuesComponent } from './characteristic-values/characteristic-values.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {PlotlyPiechartComponent} from "./piechart/plotly-piechart.component";
     PlotlyChartComponent,
     SettingsComponent,
     HeaderComponent,
-    PlotlyPiechartComponent
+    PlotlyPiechartComponent,
+    CharacteristicValuesComponent
   ],
   imports: [
     BrowserModule,
