@@ -15,6 +15,12 @@ var Plotly = require('plotly.js-dist')
 })
 @AutoUnsubscribe()
 export class PlotlyChartComponent implements OnInit {
+  xAxisDataOptions: any[] = [];
+  xAxisSelectedDataOptions: any[] = [];
+  yAxisDataOptions: any[] = [];
+  yAxisSelectedDataOptions: any[] = [];
+
+
   xAxisOptions: any[] = [];
   yAxisOptions: any[] = [];
   xAxis: string = "Select Xaxis"
@@ -37,24 +43,40 @@ export class PlotlyChartComponent implements OnInit {
    * Load the X-Data for the selected Column
    */
   getXData() {
+    console.log("CHANGE!");
+    console.log(this.xAxisSelection.parentName, this.xAxisSelection.name, this.xAxisSelection?.formula)
+
+    this.loading = true;
     this.dataService.getPlainData(this.xAxisSelection.parentName, this.xAxisSelection.name, this.xAxisSelection?.formula).subscribe((data: any) => {
       const res = data.results[0].result.components[0].results[0];
       const raw_data = this.dataService.convert_2d_to_1d_array(res.data);
       this.xAxisIds = this.dataService.convert_2d_to_1d_array(res.ids);
       this.xAxisData = raw_data;
       this.xAxisDataSub.next(raw_data);
+
+      this.loading = false;
+      this.xAxisDataOptions = this.dataService.getUniqueValues(raw_data);
+      this.xAxisSelectedDataOptions = this.xAxisDataOptions;
     });
   }
+
+  loading: boolean = false;
+
 
   /**
    * Load the Y-Data for the selected Column
    */
   getYData() {
+    this.loading = true;
     this.dataService.getPlainData(this.yAxisSelection.parentName, this.yAxisSelection.name, this.yAxisSelection?.formula).subscribe((data: any) => {
       const res = data.results[0].result.components[0].results[0];
       const raw_data = this.dataService.convert_2d_to_1d_array(res.data);
       this.yAxisData = raw_data;
       this.yAxisDataSub.next(raw_data);
+
+      this.loading = false;
+      this.yAxisDataOptions = this.dataService.getUniqueValues(raw_data);
+      this.yAxisSelectedDataOptions = this.yAxisDataOptions;
     });
   }
 

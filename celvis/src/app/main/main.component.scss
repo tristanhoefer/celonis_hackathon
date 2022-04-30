@@ -60,6 +60,14 @@
   .double-card, .single-card {
     margin-bottom: var(--margin);
     overflow: hidden;
+
+    &:not(.last-card) {
+      max-height: 70vh;
+    }
+  }
+
+  .last-card {
+    margin-bottom: 3rem;
   }
 
   .double-card {

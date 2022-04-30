@@ -180,9 +180,9 @@ export class DataService {
     })
   }
 
-
   getPlainData(tableName: string, columnName: string, formula: string | undefined = undefined) {
     let query = "";
+
     if (formula) {
       query = formula;
     } else {

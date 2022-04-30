@@ -52,7 +52,8 @@ html {
   --color-brand-primary-selected: #cee9f1;
   --color-brand-primary-lightest: #f9f9f9;
   --color-modal-header-bg: #9bd2e2;
-  --color-brand-green: #87c99b;
+  --color-brand-green: rgb(94, 254, 80);
+  --color-brand-green-light: #87c99b;
 
   // Gray Tones
   --color-gray-lightest: #f1f1f1;
@@ -86,6 +87,14 @@ html {
   //--bg-rank-3: #eec870;
   //--bg-rank-4: #ff8884;
   //--color-strong-blue: #0778d0;
+}
+
+.p-slider .p-slider-range {
+  background-color: var(--color-brand-primary);
+}
+
+.p-slider .p-slider-handle {
+  border-color: var(--color-brand-primary);
 }
 
 

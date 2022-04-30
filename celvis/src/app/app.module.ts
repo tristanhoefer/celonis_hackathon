@@ -22,6 +22,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {PlotlyPiechartComponent} from "./plotly-piechart/plotly-piechart.component";
 import { CharacteristicValuesComponent } from './characteristic-values/characteristic-values.component';
 import {FieldsetModule} from "primeng/fieldset";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import {FieldsetModule} from "primeng/fieldset";
     SliderModule,
     InputTextModule,
     MultiSelectModule,
-    FieldsetModule
+    FieldsetModule,
+    ProgressSpinnerModule
   ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]

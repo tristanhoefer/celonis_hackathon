@@ -1,6 +1,6 @@
 <div class="wrapper">
 
-  <div class="center axis-selector">
+  <div class="axis-selector">
     <!-- X-Axis Selection -->
     <span class="p-float-label">
       <p-cascadeSelect [options]="xAxisOptions" inputId="xAxisID"
@@ -11,8 +11,7 @@
       > </p-cascadeSelect>
         <label for="xAxisID">Select xAxis</label>
     </span>
-    <div class="yAxisPadding">
-    </div>
+
     <!-- Y-Axis Selection -->
     <span class="p-float-label">
     <p-cascadeSelect [options]="yAxisOptions" inputId="yAxisID"
@@ -24,7 +23,33 @@
       <label for="yAxisID">Select yAxis</label>
     </span>
 
+    <!-- X-Axis Detailed Selection -->
+    <span class="p-float-label">
+      <p-multiSelect [options]="xAxisDataOptions" [(ngModel)]="xAxisSelectedDataOptions"
+                     [virtualScroll]="true"
+                     [style]="{'minWidth': '14rem'}"
+                     selectedItemsLabel="{0} items selected"></p-multiSelect>
+      <label for="xAxisID">Select specific Data</label>
+    </span>
+
+    <!-- Y-Axis Detailed Selection -->
+    <span class="p-float-label">
+      <p-multiSelect [options]="yAxisDataOptions" [(ngModel)]="yAxisSelectedDataOptions"
+                     [virtualScroll]="true"
+                     [style]="{'minWidth': '14rem'}"
+                     selectedItemsLabel="{0} items selected"></p-multiSelect>
+      <label for="yAxisID">Select specific Data</label>
+    </span>
+
   </div>
 
-  <div id="myDiv"></div>
+  <ng-container *ngIf="loading">
+    <div class="spinner-div">
+      <p-progressSpinner [style]="{width: '20%', height: '20%', marginLeft: '40%'}"
+                         styleClass="custom-spinner" strokeWidth="8"
+                         fill="var(--surface-ground)"
+                         animationDuration="3s"></p-progressSpinner>
+    </div>
+  </ng-container>
+  <div id="myDiv" [hidden]="loading"></div>
 </div>
