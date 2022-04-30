@@ -1,16 +1,17 @@
 <div class="wrapper">
   <div id="myDiv"></div>
 
-
   <div class="center axis-selector">
-    <p-cascadeSelect [(ngModel)]="xAxis" [options]="xAxisOptions"
+    <!-- X-Axis Selection -->
+    <p-cascadeSelect [(ngModel)]="xAxisSelection" [options]="xAxisOptions"
                      styleClass="xAxisSelect"
                      optionLabel="name" optionGroupLabel="name"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
                      (onChange)="xChange()"
                      placeholder="Select xAxis"></p-cascadeSelect>
 
-    <p-cascadeSelect [(ngModel)]="yAxis" [options]="yAxisOptions"
+    <!-- Y-Axis Selection -->
+    <p-cascadeSelect [(ngModel)]="yAxisSelection" [options]="yAxisOptions"
                      styleClass="yAxisSelect"
                      optionLabel="name" optionGroupLabel="name"
                      [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"

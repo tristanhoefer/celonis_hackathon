@@ -1,42 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from "../api/data-service";
+import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
 
 @Component({
   selector: 'settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
+@AutoUnsubscribe()
 export class SettingsComponent implements OnInit {
-
-  selectedTable: any = {};
-  tables: any = [];
-
+  // Store selected dataset from Tree & the tree itself
   selectedTree: any = {};
   tree: any = [];
 
-  selectedColumnData: any = {};
-  colData: any = [];
+  // Store Selected Table (and all tables of the selected dataset)
+  selectedTable: any = {};
+  tables: any = [];
 
+  // Value, Min and Max for the Slider
   val: number = 50;
   min: number = 0;
-  max: number = 1000;
+  max: number = 10000;
 
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
-
     this.dataService.getPackage();
 
     this.dataService.treeSub.subscribe((data: any) => {
-      console.log(data);
+      // Update tree data if we get new one
       this.tree = data;
     })
 
     // Subscribe to the Tables
-    this.dataService.tableSub.subscribe((data: any) => {
+    this.dataService.tableAndColSub.subscribe((data: any) => {
+      // Update table and col data if we get new one
       this.tables = data;
     })
-
 
     this.dataService.clusterSub.subscribe((data: any) => {
       if(!data.data) return;
@@ -44,31 +44,23 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-
-
+  // Only for illustrative purposes, delete later...
   unique_clusters: any = {};
 
   loadTree() {
     // Get all Tables from the Dataset
-    console.log(this.selectedTree);
     this.dataService.dataset_key = this.selectedTree.id;
-    this.dataService.getTables();
+    this.dataService.getTablesAndColumns();
   }
 
-  updateTableSelection() {
-    // Get Column Data
-    console.log("Changed to ", this.selectedTable);
-    this.dataService.tableName = this.selectedTable.parentName;
-    this.dataService.colName = this.selectedTable.name;
-    this.dataService.getSelectedColData(this.selectedTable);
-    this.dataService.getSliderData(this.selectedTable);
-    this.dataService.getClusters(this.selectedTable, this.val);
+  updateColumnSelection() {
+    // Get correct Clusters Data
+    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.val);
   }
 
 
   updateSlider() {
-    this.dataService.getClusters(this.selectedTable, this.val);
+    // Get new Clusters
+    this.dataService.getClusters(this.selectedTable.parentName, this.selectedTable.name, this.val);
   }
-
-
 }

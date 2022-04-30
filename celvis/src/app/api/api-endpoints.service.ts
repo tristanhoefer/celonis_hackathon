@@ -28,7 +28,7 @@ export class ApiEndpointsService {
    * @param limit Query Result Limit
    * @param offset Query Result Offset
    */
-  createPQLQueryBody(query: string, limit: number | null = 50, offset: number = 0): any {
+  createPQLQueryBody(query: string, limit: number | null = 400, offset: number = 0): any {
     const limit_string: string = (limit) ? " LIMIT " + limit : "";
     const offset_string: string = (offset) ? " OFFSET " + offset : "";
     return {

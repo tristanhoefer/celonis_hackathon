@@ -1,21 +1,27 @@
+Settings Menu
 <div >
+  <!-- Select Dataset -->
   <p-cascadeSelect [(ngModel)]="selectedTree" [options]="tree" optionLabel="name" optionGroupLabel="name"
                    [optionGroupChildren]="['folders', 'assets']" [style]="{'minWidth': '14rem'}"
                    (onChange)="loadTree()"
                    placeholder="Select Dataset"></p-cascadeSelect>
 
+  <!-- Select Correct Table & Column Entry -->
   <p-cascadeSelect [(ngModel)]="selectedTable" [options]="tables" optionLabel="name" optionGroupLabel="name"
                    [optionGroupChildren]="['columns']" [style]="{'minWidth': '14rem'}"
-                   (onChange)="updateTableSelection()" *ngIf="tables?.length"
+                   (onChange)="updateColumnSelection()" *ngIf="tables?.length"
                    placeholder="Select Column"></p-cascadeSelect>
 </div>
 
-{{unique_clusters | json}}
 
+<!-- Slider for the Cluster -->
 <div class="slider">
-  <h5>PrimeNG Slider component</h5>
-  <h5>Input: {{val}}</h5>
   <input type="text" pInputText [(ngModel)]="val"/>
   <p-slider [(ngModel)]="val" [min]="min" [max]="max" (onSlideEnd)="updateSlider()"></p-slider>
 </div>
+
+
+<!-- Temporarily print out the uniquely found clusters -->
+Found Clusters:
+{{unique_clusters | json}}
 
