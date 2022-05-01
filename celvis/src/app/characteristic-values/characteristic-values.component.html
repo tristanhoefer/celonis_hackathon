@@ -28,6 +28,7 @@
     <div class="entry">
       <h5>Includes...
         <p-dropdown [options]="activities" [(ngModel)]="selectedActivity"
+                    [filter]="true" filterBy="name" optionLabel="name"
                     (onChange)="loadVariantProperties()"></p-dropdown>
       </h5>
       <h5 class="value">{{numVariant}}</h5>

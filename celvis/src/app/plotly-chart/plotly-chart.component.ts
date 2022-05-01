@@ -164,6 +164,7 @@ export class PlotlyChartComponent implements OnInit {
       // Get the Number of Clusters
       this.num_colors = (this.dataService.getUniqueValues(
         this.dataService.convert_2d_to_1d_array(this.dataService.clusters?.data))?.length || 1)
+      console.log(this.num_colors);
 
       // Update Colors if we have Clusters
       this.color = this.dataService.convert_2d_to_1d_array(data.data, this.generateColorByIndex.bind(this));

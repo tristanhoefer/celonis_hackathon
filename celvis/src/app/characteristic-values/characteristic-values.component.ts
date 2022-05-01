@@ -16,7 +16,7 @@ export class CharacteristicValuesComponent implements OnInit {
 
   activities: any = [];
   allActivities: any = [];
-  selectedActivity: string = "";
+  selectedActivity: any = undefined;
 
   clickedId: number = -5;
   clusterSize: number = 0;
@@ -40,7 +40,7 @@ export class CharacteristicValuesComponent implements OnInit {
       this.clickedId = id;
 
       this.activities = this.allActivities.filter((d: any) => d[1] == this.clickedId);
-      this.activities = this.activities.map((d: any) => d[0]);
+      this.activities = this.activities.map((d: any) => { return { "name": d[0]}});
       this.selectedActivity = this.activities[0];
       this.loadVariantProperties();
 
@@ -94,7 +94,8 @@ export class CharacteristicValuesComponent implements OnInit {
 
   numVariant: any = 0;
   loadVariantProperties() {
-    this.dataService.getVariant(this.selectedActivity);
+    if(!this.selectedActivity?.name) return;
+    this.dataService.getVariant(this.selectedActivity.name);
     this.dataService.getVariantSub.subscribe((data: any) => {
       const correct_data = data.filter((d: any) => d[1] == this.clickedId);
       const red_data = correct_data.map((d: any) => d[0]);
