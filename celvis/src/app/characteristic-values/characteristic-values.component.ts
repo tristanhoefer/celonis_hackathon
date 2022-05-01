@@ -11,10 +11,14 @@ import {ApiHttpService} from "../api/ApiHttpService";
 })
 @AutoUnsubscribe()
 export class CharacteristicValuesComponent implements OnInit {
+  selectedVariant: any = {};
 
   constructor(private dataService: DataService, private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
   }
 
+  activities: any = [];
+
+  selectedActivity: string = "";
   clickedId: number = -5;
   clusterSize: number = 0;
   variantCluster: Map<number, number> = new Map();
@@ -35,9 +39,21 @@ export class CharacteristicValuesComponent implements OnInit {
         console.log("HENRIK: FOUND DATA: ", data);
       })
 
+
+      console.log(this.dataService.clusters);
+    })
+
+    this.dataService.clusterSizeSub.subscribe((id: number) => {
+      this.clusterSize = id;
+    })
+    this.dataService.activityVal.subscribe((data: any) => {
+      this.activities = data;
+      console.log(this.activities)
+    })
+
       this.dataService.clusterSizeSub.subscribe((id: number) => {
         this.clusterSize = id;
-      })
     });
+
   }
 }
