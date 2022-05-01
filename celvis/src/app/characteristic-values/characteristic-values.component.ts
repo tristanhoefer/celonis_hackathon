@@ -15,6 +15,7 @@ export class CharacteristicValuesComponent implements OnInit {
   }
 
   activities: any = [];
+  allActivities: any = [];
   selectedActivity: string = "";
 
   clickedId: number = -5;
@@ -37,6 +38,9 @@ export class CharacteristicValuesComponent implements OnInit {
     this.dataService.clickedIdSub.subscribe((id: number) => {
       this.loading = true;
       this.clickedId = id;
+
+      this.activities = this.allActivities.filter((d: any) => d[1] == this.clickedId);
+      this.activities = this.activities.map((d: any) => d[0]);
 
       const cluster_query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.dataService.tableClusters + "\".\"" + this.dataService.columnClusterName + "\"), " + this.dataService.minPts + ", " + this.dataService.epsilon + ") \nAS \"Cluster\"\n";
       const query = "AVG (\r\n  CALC_THROUGHPUT (\r\n    ALL_OCCURRENCE [ 'Process Start' ]\r\n    TO\r\n    ALL_OCCURRENCE [ 'Process End' ] ,\r\n    REMAP_TIMESTAMPS ( \"BPI2017_application_xes\".\"time:timestamp\" , DAYS )\r\n  )\r\n) \nAS \"Total throughput time in days\", VARIANT ( \"BPI2017_application_xes\".\"concept:name\" )  \nAS \"#{Variantpath}\", Unique_ID(VARIANT ( \"BPI2017_application_xes\".\"concept:name\" )) \nAS \"#{Variant ID}\", MODE ( \"BPI2017_application_xes\".\"org:resource\" ) \nAS \"#{Most involved User}\", AVG (\r\n  CASE WHEN PU_FIRST ( \"BPI2017_application_xes_CASES\" , \"BPI2017_application_xes\".\"Selected\" ) = 1 THEN 1 ELSE 0 END\r\n) \nAS \"New Expression\"\n FORMAT \",.2f\", " + cluster_query + "";
@@ -76,19 +80,22 @@ export class CharacteristicValuesComponent implements OnInit {
       this.clusterSize = id;
     })
     this.dataService.activityValSub.subscribe((data: any) => {
-      this.activities = data;
+      this.allActivities = data;
     })
     this.dataService.clusterSizeSub.subscribe((id: number) => {
       this.clusterSize = id;
     });
-
   }
+
+
 
   numVariant: any = 0;
   loadVariantProperties() {
     this.dataService.getVariant(this.selectedActivity);
     this.dataService.getVariantSub.subscribe((data: any) => {
-      this.numVariant = data.reduce((pv: any, cv: any) => pv + cv, 0);
+      const correct_data = data.filter((d: any) => d[1] == this.clickedId);
+      const red_data = correct_data.map((d: any) => d[0]);
+      this.numVariant = red_data.reduce((pv: any, cv: any) => pv + cv, 0);
     })
   }
 

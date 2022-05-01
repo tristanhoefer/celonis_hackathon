@@ -185,24 +185,26 @@ export class DataService {
   }
 
   getVariant(variantName: string) {
-    const query = "MATCH_ACTIVITIES(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\", NODE [\'" + variantName + "\'] )";
+    const cluster_query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\"), " + this.minPts + ", " + this.epsilon + ") \nAS \"Cluster\"\n";
+    const query = "MATCH_ACTIVITIES(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\", NODE [\'" + variantName + "\'] ), " + cluster_query;
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
-      const a = data.results[0].result.components[0].results[0];
-      const content = this.convert_2d_to_1d_array(a.data);
-      this.getVariantSub.next(content);
+      const a = data.results[0].result.components[0].results[0].data;
+      // const content = this.convert_2d_to_1d_array(a.data);
+      this.getVariantSub.next(a);
     })
   }
 
   getDistinctActivities(tableName: string, columnName: string) {
-    const query = "DISTINCT \"" + tableName + "\".\"" + columnName + "\"";
+    const cluster_query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\"), " + this.minPts + ", " + this.epsilon + ") \nAS \"Cluster\"\n";
+    const query = "DISTINCT \"" + tableName + "\".\"" + columnName + "\", " + cluster_query;
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
-      const a = data.results[0].result.components[0].results[0];
-      const content = this.convert_2d_to_1d_array(a.data);
-      this.activityValSub.next(content);
+      const a = data.results[0].result.components[0].results[0].data;
+      // const content = this.convert_2d_to_1d_array(a.data);
+      this.activityValSub.next(a);
     })
   }
 
