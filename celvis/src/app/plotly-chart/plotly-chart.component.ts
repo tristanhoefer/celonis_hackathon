@@ -25,43 +25,43 @@ export class PlotlyChartComponent implements OnInit {
     this.visibleColor = [];
     let ids: Set<number> = new Set();
     this.xAxisData.forEach((d: any, index: number) => {
-      if(!this.xAxisSelectedDataOptions.includes(d)) ids.add(index);
+      if (!this.xAxisSelectedDataOptions.includes(d)) ids.add(index);
     })
     this.yAxisData.forEach((d: any, index: number) => {
-      if(!this.yAxisSelectedDataOptions.includes(d)) ids.add(index);
+      if (!this.yAxisSelectedDataOptions.includes(d)) ids.add(index);
     })
 
     this.xAxisData.forEach((d: any, index: number) => {
-      if(!ids.has(index)) this.visibleXData.push(d);
+      if (!ids.has(index)) this.visibleXData.push(d);
     })
     this.yAxisData.forEach((d: any, index: number) => {
-      if(!ids.has(index)) this.visibleYData.push(d);
+      if (!ids.has(index)) this.visibleYData.push(d);
     })
     this.color.forEach((d: any, index: number) => {
-      if(!ids.has(index)) this.visibleColor.push(d);
+      if (!ids.has(index)) this.visibleColor.push(d);
     })
     this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
   }
 
   // updateRealSelect() {
-    // this.visibleXData = [];
-    // this.visibleYData = [];
-    // this.xAxisData.forEach((d: any, index: number) => {
-    //   if(this.xAxisSelectedDataOptions.includes(d)) {
-    //     this.visibleXData.push(d);
-    //   }
-    // })
-    // this.yAxisData.forEach((d: any, index: number) => {
-    //   if(this.yAxisSelectedDataOptions.includes(d)) {
-    //     this.visibleYData.push(d);
-    //   }
-    // })
-    // this.color.forEach((d: any, index: number) => {
-    //   if(this.xAxisSelectedDataOptions.includes(d)) {
-    //     this.visibleColor.push(d);
-    //   }
-    // })
-    // this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
+  // this.visibleXData = [];
+  // this.visibleYData = [];
+  // this.xAxisData.forEach((d: any, index: number) => {
+  //   if(this.xAxisSelectedDataOptions.includes(d)) {
+  //     this.visibleXData.push(d);
+  //   }
+  // })
+  // this.yAxisData.forEach((d: any, index: number) => {
+  //   if(this.yAxisSelectedDataOptions.includes(d)) {
+  //     this.visibleYData.push(d);
+  //   }
+  // })
+  // this.color.forEach((d: any, index: number) => {
+  //   if(this.xAxisSelectedDataOptions.includes(d)) {
+  //     this.visibleColor.push(d);
+  //   }
+  // })
+  // this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
   // }
 
 
@@ -95,7 +95,7 @@ export class PlotlyChartComponent implements OnInit {
   getXData() {
     this.loading = true;
     this.dataService.getPlainData(this.xAxisSelection.parentName, this.xAxisSelection.name, this.xAxisSelection?.formula).subscribe((data: any) => {
-      if(!data.results.length || data.results[0].result.components.length) {
+      if (!data.results.length || data.results[0].result.components.length) {
         this.loading = false;
         return;
       }
@@ -122,7 +122,7 @@ export class PlotlyChartComponent implements OnInit {
   getYData() {
     this.loading = true;
     this.dataService.getPlainData(this.yAxisSelection.parentName, this.yAxisSelection.name, this.yAxisSelection?.formula).subscribe((data: any) => {
-      if(!data.results.length || data.results[0].result.components.length) {
+      if (!data.results.length || data.results[0].result.components.length) {
         this.loading = false;
         return;
       }
@@ -180,6 +180,10 @@ export class PlotlyChartComponent implements OnInit {
    * @param color Color of the dots (optional)
    */
   updatePlot(x: any[], y: any[], color: any[] = []) {
+    if(x.length > 1000) x = x.slice(0, 1000)
+    if(y.length > 1000) y = y.slice(0, 1000)
+    if(color.length > 1000) color = color.slice(0, 1000)
+
     const data = [
       {
         x: x,
@@ -187,7 +191,19 @@ export class PlotlyChartComponent implements OnInit {
         mode: 'markers',
         marker: {
           size: 10,
-          color: this.visibleColor
+          color: this.visibleColor,
+          colorscale: [
+            ['0.0', 'rgb(165,0,38)'],
+            ['0.111111111111', 'rgb(215,48,39)'],
+            ['0.222222222222', 'rgb(244,109,67)'],
+            ['0.333333333333', 'rgb(253,174,97)'],
+            ['0.444444444444', 'rgb(254,224,144)'],
+            ['0.555555555556', 'rgb(224,243,248)'],
+            ['0.666666666667', 'rgb(171,217,233)'],
+            ['0.777777777778', 'rgb(116,173,209)'],
+            ['0.888888888889', 'rgb(69,117,180)'],
+            ['1.0', 'rgb(49,54,149)']
+          ],
         },
         type: 'scatter'
       }
