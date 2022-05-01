@@ -26,7 +26,7 @@ declare var d3: any;
 @AutoUnsubscribe()
 export class DataService {
   // readonly LIMIT = 1000000;
-  readonly LIMIT = 5000;
+  readonly LIMIT = 50000;
 
 
   // readonly KEY: string  = "99f38193-e510-4635-9f0a-c0b98b13b451"
