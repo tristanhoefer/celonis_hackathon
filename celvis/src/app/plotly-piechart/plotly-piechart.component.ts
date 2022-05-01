@@ -20,10 +20,13 @@ export class PlotlyPiechartComponent implements OnInit {
   labels: any[] = [];
   values: any[] = [];
 
+  total_number_of_variants: number = 0;
+
   ngOnInit(): void {
     this.updatePieChart()
 
     this.dataService.clusterInformalDataSub.subscribe((data: any) => {
+      this.total_number_of_variants = data[-1];
       this.labels = [];
       this.values = [];
       this.labels.push(-1);
@@ -31,6 +34,7 @@ export class PlotlyPiechartComponent implements OnInit {
       data.forEach((d: any, index: number) => {
         this.labels.push(index);
         this.values.push(d);
+        this.total_number_of_variants += d;
       });
       this.updatePieChart();
     })

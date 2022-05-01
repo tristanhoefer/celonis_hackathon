@@ -24,6 +24,7 @@ import { CharacteristicValuesComponent } from './characteristic-values/character
 import {FieldsetModule} from "primeng/fieldset";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {DropdownModule} from 'primeng/dropdown';
+import {TableModule} from "primeng/table";
 
 
 @NgModule({
@@ -36,21 +37,22 @@ import {DropdownModule} from 'primeng/dropdown';
     PlotlyPiechartComponent,
     CharacteristicValuesComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    ListboxModule,
-    CascadeSelectModule,
-    FormsModule,
-    SliderModule,
-    InputTextModule,
-    MultiSelectModule,
-    FieldsetModule,
-    ProgressSpinnerModule,
-    DropdownModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        ListboxModule,
+        CascadeSelectModule,
+        FormsModule,
+        SliderModule,
+        InputTextModule,
+        MultiSelectModule,
+        FieldsetModule,
+        ProgressSpinnerModule,
+        DropdownModule,
+        TableModule
+    ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]
 })

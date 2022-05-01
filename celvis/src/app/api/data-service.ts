@@ -26,7 +26,8 @@ declare var d3: any;
 @AutoUnsubscribe()
 export class DataService {
   // readonly LIMIT = 1000000;
-  readonly LIMIT = 1000;
+  readonly LIMIT = 5000;
+
 
   // readonly KEY: string  = "99f38193-e510-4635-9f0a-c0b98b13b451"
   // Key of the Dataset we use
@@ -55,7 +56,8 @@ export class DataService {
   variants: any = {};
 
   //save distinct activity values
-  activityVal: BehaviorSubject<any> = new BehaviorSubject([]);
+  activityValSub: BehaviorSubject<any> = new BehaviorSubject([]);
+  getVariantSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
   clusterEstimateSub: BehaviorSubject<any> = new BehaviorSubject([]);
@@ -107,16 +109,6 @@ export class DataService {
         tmp_map.set(index, new ProcessTree(null, operator, value[1]));
       })
 
-      console.log("Map: ", tmp_map);
-      console.log("Edges: ", edge_data);
-
-      // edge_data.slice().reverse().forEach((value: any, index: number) => {
-      //   let test = tmp_map.get(value[1]);
-      //   test.parentNode = tmp_map.get(value[0]);
-      //   console.log(test);
-      //   tmp_map.get(value[0]).children.push(test);
-      // });
-
       edge_data.forEach((value: any, index: number) => {
         let test = tmp_map.get(value[1]);
         test.parentNode = tmp_map.get(value[0]);
@@ -154,6 +146,10 @@ export class DataService {
     })
   }
 
+  tableClusters: string = ""
+  columnClusterName: string = ""
+  minPts: number = 0
+  epsilon: number = 0
 
   /**
    * Get the Clustering for
@@ -164,6 +160,10 @@ export class DataService {
    * @param epsilon
    */
   getClusters(tableName: string, columnName: string, minPts: number, epsilon: number = 2) {
+    this.tableClusters = tableName;
+    this.columnClusterName = columnName;
+    this.minPts = minPts;
+    this.epsilon = epsilon;
     const query = "CLUSTER_VARIANTS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n";
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
 
@@ -185,32 +185,27 @@ export class DataService {
   }
 
   getVariant(variantName: string) {
-    const query = "TABLE (MATCH_ACTIVITIES(\"BPI2017_application_xes\".\"concept:name\", NODE [" + variantName + "] ))";
-    const body = this.apiEndpoint.createPQLQueryBodyWithoutTable(query, this.LIMIT);
+    const query = "MATCH_ACTIVITIES(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\", NODE [\'" + variantName + "\'] )";
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
-      console.log("Tristan pre Return: " + data);
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
-      this.variants = data.results[0].result.components[0].results[0];
-
-      console.log("Tristan: " + this.variants);
-  })
+      const a = data.results[0].result.components[0].results[0];
+      const content = this.convert_2d_to_1d_array(a.data);
+      this.getVariantSub.next(content);
+    })
   }
 
   getDistinctActivities(tableName: string, columnName: string) {
-    const query = "TABLE ( DISTINCT \"" + tableName +"\".\"" + columnName + "\")";
-    const body = this.apiEndpoint.createPQLQueryBodyWithoutTable(query, this.LIMIT);
+    const query = "DISTINCT \"" + tableName + "\".\"" + columnName + "\"";
+    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
-      console.log("Tristan pre Return: " + data);
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
-      //this.activityVal.next(data.results[0].result.components[0].results[0].data);
-
       const a = data.results[0].result.components[0].results[0];
       const content = this.convert_2d_to_1d_array(a.data);
-      this.activityVal.next(content);
-
-      console.log("Tristan: " + this.activityVal);
+      this.activityValSub.next(content);
     })
   }
+
   clusterInformalData: any[] = [];
   clusterInformalDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
 

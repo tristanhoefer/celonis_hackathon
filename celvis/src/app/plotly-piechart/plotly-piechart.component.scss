@@ -1,0 +1,16 @@
+.color {
+  margin-left: 1rem;
+  display: inline-block;
+  color: var(--color-brand-primary);
+}
+
+
+::ng-deep .pieplotbox {
+  .pielayer {
+    cursor: pointer;
+  }
+
+  .p-fieldset.p-component.p-fieldset-toggleable, .p-toggleable-content, .p-fieldset-content, .plot-container, #myDiv1 {
+    height: 100%;
+  }
+}

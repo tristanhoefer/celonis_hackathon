@@ -174,7 +174,7 @@ export class PlotlyChartComponent implements OnInit {
 
   // Create contrast-rich color...
   generateColorByIndex(idx: number) {
-    const hue = Math.max(0, idx * (360 / this.num_colors) % 360); // use golden angle approximation
+    const hue = Math.max(0, (idx+1) * (360 / (this.num_colors+1)) % 360); // use golden angle approximation
     return `hsl(${hue}, 100%, 50%)`;
   }
 
@@ -200,7 +200,6 @@ export class PlotlyChartComponent implements OnInit {
       }
     ];
     const layout = {
-      title: "Test Title...!",
       font: {size: 12}
     }
     const config = {responsive: true}

@@ -1,7 +1,83 @@
 <ng-container *ngIf="clickedId > -4">
-  <h2>Selected Cluster ID: {{clickedId}}</h2>
-  <p>Cluster Size: {{clusterSize}}</p>
+  <ng-container *ngIf="!shouldBeVisible()">
+    Unfortunately, the Case-Details View is only supported for BPI-Data yet!
+  </ng-container>
 
-  <p-dropdown [options]="activities" [(ngModel)]="selectedActivity"></p-dropdown>
+  <ng-container *ngIf="loading && shouldBeVisible()">
+    <div class="center">Calculating...</div>
+    <div class="spinner-div">
+      <p-progressSpinner [style]="{width: '20%', height: '20%', marginLeft: '40%'}"
+                         styleClass="custom-spinner" strokeWidth="8"
+                         fill="var(--surface-ground)"
+                         animationDuration="3s"></p-progressSpinner>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && shouldBeVisible()">
+    <!-- Heading -->
+    <div class="entry first">
+      <h2>Selected Cluster ID:</h2>
+      <h2 class="value">{{clickedId}}</h2>
+    </div>
+
+    <div class="entry">
+      <h5>Cluster Size:</h5>
+      <h5 class="value">{{clusterSize}}</h5>
+    </div>
+
+    <div class="entry">
+      <h5>Includes...
+        <p-dropdown [options]="activities" [(ngModel)]="selectedActivity"
+                    (onChange)="loadVariantProperties()"></p-dropdown>
+      </h5>
+      <h5 class="value">{{numVariant}}</h5>
+    </div>
+
+    <div class="entry">
+      <h5>Number of Distinct Traces:</h5>
+      <h5 class="value">{{numberDistinctTraces}}</h5>
+    </div>
+
+    <div class="entry">
+      <h5>Average Actions per Traces:</h5>
+      <h5 class="value">{{averageActionsPerTrace}}</h5>
+    </div>
+
+    <div class="entry">
+      <h5>Average Throughput Time: </h5>
+      <h5 class="value">{{averageThroughputTime}}</h5>
+    </div>
+
+    <div class="entry">
+      <h5>Average Completion Rate: </h5>
+      <h5 class="value">{{averateCompletionRate}}</h5>
+    </div>
+
+    <!-- Show Customer Details -->
+    <h5>Customers</h5>
+    <p-table [value]="customers" [scrollable]="true" scrollHeight="400px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:100px" pSortableColumn="name">Name
+            <p-sortIcon field="name"></p-sortIcon>
+            <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+          </th>
+          <th style="min-width:100px" pSortableColumn="amount">#Occurences
+            <p-sortIcon field="amount"></p-sortIcon>
+            <p-columnFilter type="numeric" field="amount" display="menu"></p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td style="min-width:100px">{{customer.name}}</td>
+          <td style="min-width:100px">{{customer.amount}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-container>
 </ng-container>
 
+<ng-container *ngIf="clickedId <= -4">
+  <p>No Cluster selected. Please first select a Cluster inside the "Case Distribution" overview.</p>
+</ng-container>
