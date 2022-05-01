@@ -53,6 +53,10 @@ export class DataService {
   //save variants from pql call
   variants: any = {};
 
+  //save distinct activity values
+  activityVal: any = {};
+
+
   clusterEstimateSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
@@ -177,13 +181,20 @@ export class DataService {
       this.variants = data.results[0].result.components[0].results[0];
 
       console.log("Tristan: " + this.variants);
-
-
-
-
   })
   }
 
+  getDistinctActivities(tableName: string, columnName: string) {
+    const query = "TABLE ( DISTINCT \"" + tableName +"\".\"" + columnName + "\")";
+    const body = this.apiEndpoint.createPQLQueryBodyWithoutTable(query, this.LIMIT);
+    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      console.log("Tristan pre Return: " + data);
+      if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
+      this.activityVal = data.results[0].result.components[0].results[0];
+
+      console.log("Tristan: " + this.activityVal);
+    })
+  }
   clusterInformalData: any[] = [];
   clusterInformalDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
 

@@ -102,6 +102,7 @@ export class SettingsComponent implements OnInit {
       this.exclusion_token = true;
       this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
       this.dataService.getVariant('\'A_Create Application\'');
+      this.dataService.getDistinctActivities(this.selectedVariant.parentName, this.selectedVariant.name);
       const data: number[] = this.no_cluster_data
       if(!data.length) {
         this.exclusion_token = false;
@@ -119,6 +120,7 @@ export class SettingsComponent implements OnInit {
       this.exclusion_token = true;
       this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.no_cluster_data[this.no_clusters_val-1]);
       this.dataService.getVariant('\'A_Create Application\'');
+      this.dataService.getDistinctActivities(this.selectedVariant.parentName, this.selectedVariant.name);
       this.min_pts_val = this.no_cluster_data[this.no_clusters_val-1]
       this.exclusion_token = false;
     }
