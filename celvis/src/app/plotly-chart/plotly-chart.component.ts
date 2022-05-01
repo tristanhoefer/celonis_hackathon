@@ -97,6 +97,7 @@ export class PlotlyChartComponent implements OnInit {
     this.xAxisDataSub.subscribe((data: any) => {
       if (!data?.length) return;
       this.updatePlot(this.xAxisData, this.yAxisData, this.color)
+      console.log(this.dataService.getUniqueValues(this.xAxisData))
     })
 
     this.dataService.clusterSub.subscribe((data: any) => {
