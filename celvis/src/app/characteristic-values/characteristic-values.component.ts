@@ -41,6 +41,9 @@ export class CharacteristicValuesComponent implements OnInit {
 
       this.activities = this.allActivities.filter((d: any) => d[1] == this.clickedId);
       this.activities = this.activities.map((d: any) => d[0]);
+      this.selectedActivity = this.activities[0];
+      this.loadVariantProperties();
+
 
       const cluster_query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.dataService.tableClusters + "\".\"" + this.dataService.columnClusterName + "\"), " + this.dataService.minPts + ", " + this.dataService.epsilon + ") \nAS \"Cluster\"\n";
       const query = "AVG (\r\n  CALC_THROUGHPUT (\r\n    ALL_OCCURRENCE [ 'Process Start' ]\r\n    TO\r\n    ALL_OCCURRENCE [ 'Process End' ] ,\r\n    REMAP_TIMESTAMPS ( \"BPI2017_application_xes\".\"time:timestamp\" , DAYS )\r\n  )\r\n) \nAS \"Total throughput time in days\", VARIANT ( \"BPI2017_application_xes\".\"concept:name\" )  \nAS \"#{Variantpath}\", Unique_ID(VARIANT ( \"BPI2017_application_xes\".\"concept:name\" )) \nAS \"#{Variant ID}\", MODE ( \"BPI2017_application_xes\".\"org:resource\" ) \nAS \"#{Most involved User}\", AVG (\r\n  CASE WHEN PU_FIRST ( \"BPI2017_application_xes_CASES\" , \"BPI2017_application_xes\".\"Selected\" ) = 1 THEN 1 ELSE 0 END\r\n) \nAS \"New Expression\"\n FORMAT \",.2f\", " + cluster_query + "";
