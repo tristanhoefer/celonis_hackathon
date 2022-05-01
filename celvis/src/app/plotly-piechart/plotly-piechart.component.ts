@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../api/data-service";
+import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
 
 // CommonJS
 // @ts-ignore
@@ -10,6 +11,7 @@ var Plotly = require('plotly.js-dist')
   templateUrl: './plotly-piechart.component.html',
   styleUrls: ['./plotly-piechart.component.scss']
 })
+@AutoUnsubscribe()
 export class PlotlyPiechartComponent implements OnInit {
 
   constructor(private dataService: DataService) {

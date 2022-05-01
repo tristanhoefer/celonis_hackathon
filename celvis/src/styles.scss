@@ -9,7 +9,10 @@ html {
   // Define Custom Properties
   --font-family: "Poppins", Arial, Helvetica, sans-serif;
 
-  body {background-color: rgb(233, 233, 233); overflow-x: hidden;}
+  body {
+    background-color: var(--color-gray-lightest);
+    overflow-x: hidden;
+  }
 
   // Font Properties
   --fw-bold: 700;

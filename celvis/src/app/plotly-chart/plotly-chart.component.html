@@ -28,6 +28,7 @@
       <p-multiSelect [options]="xAxisDataOptions" [(ngModel)]="xAxisSelectedDataOptions"
                      [virtualScroll]="true"
                      [style]="{'minWidth': '14rem'}"
+                     (onChange)="updateRealSelect()"
                      selectedItemsLabel="{0} items selected"></p-multiSelect>
       <label for="xAxisID">Select specific Data</label>
     </span>
@@ -37,6 +38,7 @@
       <p-multiSelect [options]="yAxisDataOptions" [(ngModel)]="yAxisSelectedDataOptions"
                      [virtualScroll]="true"
                      [style]="{'minWidth': '14rem'}"
+                     (onChange)="updateRealSelect()"
                      selectedItemsLabel="{0} items selected"></p-multiSelect>
       <label for="yAxisID">Select specific Data</label>
     </span>

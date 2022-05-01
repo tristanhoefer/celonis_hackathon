@@ -25,7 +25,8 @@ declare var d3: any;
 @Injectable()
 @AutoUnsubscribe()
 export class DataService {
-  readonly LIMIT = 1000000;
+  // readonly LIMIT = 1000000;
+  readonly LIMIT = 1000;
 
   // readonly KEY: string  = "99f38193-e510-4635-9f0a-c0b98b13b451"
   // Key of the Dataset we use
@@ -106,9 +107,20 @@ export class DataService {
         tmp_map.set(index, new ProcessTree(null, operator, value[1]));
       })
 
-      edge_data.slice().reverse().forEach((value: any, index: number) => {
+      console.log("Map: ", tmp_map);
+      console.log("Edges: ", edge_data);
+
+      // edge_data.slice().reverse().forEach((value: any, index: number) => {
+      //   let test = tmp_map.get(value[1]);
+      //   test.parentNode = tmp_map.get(value[0]);
+      //   console.log(test);
+      //   tmp_map.get(value[0]).children.push(test);
+      // });
+
+      edge_data.forEach((value: any, index: number) => {
         let test = tmp_map.get(value[1]);
         test.parentNode = tmp_map.get(value[0]);
+        // console.log(test);
         tmp_map.get(value[0]).children.push(test);
       });
 

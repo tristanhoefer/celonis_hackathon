@@ -10,7 +10,8 @@
       <p-fieldset legend="Case Distribution" [toggleable]="true" [collapsed]="true" [class]="'new-double-card'">
         <app-piechart></app-piechart>
       </p-fieldset>
-      <p-fieldset legend="Case Details" [toggleable]="true" [collapsed]="true" [class]="'new-double-card'">
+      <p-fieldset legend="Case Details" [toggleable]="true" [collapsed]="collapsed"
+                  (onAfterToggle)="update()" [class]="'new-double-card'">
         <characteristic-values></characteristic-values>
       </p-fieldset>
     </div>
