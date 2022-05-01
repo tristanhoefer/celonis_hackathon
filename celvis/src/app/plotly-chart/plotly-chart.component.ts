@@ -15,6 +15,56 @@ var Plotly = require('plotly.js-dist')
 })
 @AutoUnsubscribe()
 export class PlotlyChartComponent implements OnInit {
+  visibleXData: any[] = [];
+  visibleYData: any[] = [];
+  visibleColor: any[] = [];
+
+  updateRealSelect() {
+    this.visibleXData = [];
+    this.visibleYData = [];
+    this.visibleColor = [];
+    let ids: Set<number> = new Set();
+    this.xAxisData.forEach((d: any, index: number) => {
+      if(!this.xAxisSelectedDataOptions.includes(d)) ids.add(index);
+    })
+    this.yAxisData.forEach((d: any, index: number) => {
+      if(!this.yAxisSelectedDataOptions.includes(d)) ids.add(index);
+    })
+
+    this.xAxisData.forEach((d: any, index: number) => {
+      if(!ids.has(index)) this.visibleXData.push(d);
+    })
+    this.yAxisData.forEach((d: any, index: number) => {
+      if(!ids.has(index)) this.visibleYData.push(d);
+    })
+    this.color.forEach((d: any, index: number) => {
+      if(!ids.has(index)) this.visibleColor.push(d);
+    })
+    this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
+  }
+
+  // updateRealSelect() {
+    // this.visibleXData = [];
+    // this.visibleYData = [];
+    // this.xAxisData.forEach((d: any, index: number) => {
+    //   if(this.xAxisSelectedDataOptions.includes(d)) {
+    //     this.visibleXData.push(d);
+    //   }
+    // })
+    // this.yAxisData.forEach((d: any, index: number) => {
+    //   if(this.yAxisSelectedDataOptions.includes(d)) {
+    //     this.visibleYData.push(d);
+    //   }
+    // })
+    // this.color.forEach((d: any, index: number) => {
+    //   if(this.xAxisSelectedDataOptions.includes(d)) {
+    //     this.visibleColor.push(d);
+    //   }
+    // })
+    // this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
+  // }
+
+
   xAxisDataOptions: any[] = [];
   xAxisSelectedDataOptions: any[] = [];
   yAxisDataOptions: any[] = [];
@@ -43,20 +93,23 @@ export class PlotlyChartComponent implements OnInit {
    * Load the X-Data for the selected Column
    */
   getXData() {
-    console.log("CHANGE!");
-    console.log(this.xAxisSelection.parentName, this.xAxisSelection.name, this.xAxisSelection?.formula)
-
     this.loading = true;
     this.dataService.getPlainData(this.xAxisSelection.parentName, this.xAxisSelection.name, this.xAxisSelection?.formula).subscribe((data: any) => {
-      const res = data.results[0].result.components[0].results[0];
+      if(!data.results.length || data.results[0].result.components.length) {
+        this.loading = false;
+        return;
+      }
+      const res = data.results[0].result.components[0]?.results[0];
       const raw_data = this.dataService.convert_2d_to_1d_array(res.data);
       this.xAxisIds = this.dataService.convert_2d_to_1d_array(res.ids);
       this.xAxisData = raw_data;
-      this.xAxisDataSub.next(raw_data);
 
       this.loading = false;
       this.xAxisDataOptions = this.dataService.getUniqueValues(raw_data);
       this.xAxisSelectedDataOptions = this.xAxisDataOptions;
+
+      this.visibleXData = this.xAxisData;
+      this.xAxisDataSub.next(raw_data);
     });
   }
 
@@ -69,14 +122,20 @@ export class PlotlyChartComponent implements OnInit {
   getYData() {
     this.loading = true;
     this.dataService.getPlainData(this.yAxisSelection.parentName, this.yAxisSelection.name, this.yAxisSelection?.formula).subscribe((data: any) => {
+      if(!data.results.length || data.results[0].result.components.length) {
+        this.loading = false;
+        return;
+      }
+
       const res = data.results[0].result.components[0].results[0];
       const raw_data = this.dataService.convert_2d_to_1d_array(res.data);
-      this.yAxisData = raw_data;
-      this.yAxisDataSub.next(raw_data);
-
       this.loading = false;
       this.yAxisDataOptions = this.dataService.getUniqueValues(raw_data);
       this.yAxisSelectedDataOptions = this.yAxisDataOptions;
+
+      this.yAxisData = raw_data;
+      this.visibleYData = this.yAxisData;
+      this.yAxisDataSub.next(raw_data);
     });
   }
 
@@ -91,12 +150,12 @@ export class PlotlyChartComponent implements OnInit {
 
     this.yAxisDataSub.subscribe((data: any) => {
       if (!data?.length) return;
-      this.updatePlot(this.xAxisData, this.yAxisData, this.color)
+      this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
     })
 
     this.xAxisDataSub.subscribe((data: any) => {
       if (!data?.length) return;
-      this.updatePlot(this.xAxisData, this.yAxisData, this.color)
+      this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
       console.log(this.dataService.getUniqueValues(this.xAxisData))
     })
 
@@ -108,7 +167,8 @@ export class PlotlyChartComponent implements OnInit {
 
       // Update Colors if we have Clusters
       this.color = this.dataService.convert_2d_to_1d_array(data.data, this.generateColorByIndex.bind(this));
-      this.updatePlot(this.xAxisData, this.yAxisData, this.color)
+      this.visibleColor = this.color;
+      this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
     })
   }
 

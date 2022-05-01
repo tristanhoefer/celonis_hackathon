@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {DataService} from "../api/data-service";
 
 @Component({
   selector: 'app-main',
@@ -6,9 +7,18 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  constructor() {
+  constructor(private dataService: DataService) {
+  }
+
+  collapsed: boolean = true;
+
+  update() {
+    this.collapsed = !this.collapsed;
   }
 
   ngOnInit(): void {
+    this.dataService.clickedIdSub.subscribe((id: number) => {
+      if(id > -3) this.collapsed = false;
+    })
   }
 }
