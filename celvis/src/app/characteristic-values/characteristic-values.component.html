@@ -1,4 +1,7 @@
 <ng-container *ngIf="clickedId > -4">
   <h2>Selected Cluster ID: {{clickedId}}</h2>
   <p>Cluster Size: {{clusterSize}}</p>
+
+  <p-dropdown [options]="activities" [(ngModel)]="selectedActivity"></p-dropdown>
 </ng-container>
+

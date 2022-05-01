@@ -54,7 +54,7 @@ export class DataService {
   variants: any = {};
 
   //save distinct activity values
-  activityVal: any = {};
+  activityVal: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
   clusterEstimateSub: BehaviorSubject<any> = new BehaviorSubject([]);
@@ -190,7 +190,11 @@ export class DataService {
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       console.log("Tristan pre Return: " + data);
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
-      this.activityVal = data.results[0].result.components[0].results[0];
+      //this.activityVal.next(data.results[0].result.components[0].results[0].data);
+
+      const a = data.results[0].result.components[0].results[0];
+      const content = this.convert_2d_to_1d_array(a.data);
+      this.activityVal.next(content);
 
       console.log("Tristan: " + this.activityVal);
     })

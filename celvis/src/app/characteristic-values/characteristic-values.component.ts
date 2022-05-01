@@ -7,9 +7,13 @@ import {DataService} from "../api/data-service";
   styleUrls: ['./characteristic-values.component.scss']
 })
 export class CharacteristicValuesComponent implements OnInit {
+  selectedVariant: any = {};
 
   constructor(private dataService: DataService) { }
 
+  activities: any = [];
+
+  selectedActivity: string = "";
   clickedId: number = -5;
   clusterSize: number = 0;
 
@@ -22,6 +26,10 @@ export class CharacteristicValuesComponent implements OnInit {
 
     this.dataService.clusterSizeSub.subscribe((id: number) => {
       this.clusterSize = id;
+    })
+    this.dataService.activityVal.subscribe((data: any) => {
+      this.activities = data;
+      console.log(this.activities)
     })
   }
 
