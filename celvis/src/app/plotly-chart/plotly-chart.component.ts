@@ -156,7 +156,6 @@ export class PlotlyChartComponent implements OnInit {
     this.xAxisDataSub.subscribe((data: any) => {
       if (!data?.length) return;
       this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
-      console.log(this.dataService.getUniqueValues(this.xAxisData))
     })
 
     this.dataService.clusterSub.subscribe((data: any) => {
@@ -164,20 +163,15 @@ export class PlotlyChartComponent implements OnInit {
       // Get the Number of Clusters
       this.num_colors = (this.dataService.getUniqueValues(
         this.dataService.convert_2d_to_1d_array(this.dataService.clusters?.data))?.length || 1)
-      console.log(this.num_colors);
 
       // Update Colors if we have Clusters
-      this.color = this.dataService.convert_2d_to_1d_array(data.data, this.generateColorByIndex.bind(this));
+      this.color = this.dataService.convert_2d_to_1d_array(data.data).map((val: number) => val + 2);
+      // this.color = this.dataService.convert_2d_to_1d_array(data.data, this.generateColorByIndex.bind(this));
       this.visibleColor = this.color;
       this.updatePlot(this.visibleXData, this.visibleYData, this.visibleColor)
     })
   }
 
-  // Create contrast-rich color...
-  generateColorByIndex(idx: number) {
-    const hue = Math.max(0, (idx+1) * (360 / (this.num_colors+1)) % 360); // use golden angle approximation
-    return `hsl(${hue}, 100%, 50%)`;
-  }
 
   /**
    * Update the Plotly Plot
@@ -186,8 +180,6 @@ export class PlotlyChartComponent implements OnInit {
    * @param color Color of the dots (optional)
    */
   updatePlot(x: any[], y: any[], color: any[] = []) {
-    if (x.length !== color.length) color = "0".repeat(x.length).split("");
-
     const data = [
       {
         x: x,
@@ -195,7 +187,7 @@ export class PlotlyChartComponent implements OnInit {
         mode: 'markers',
         marker: {
           size: 10,
-          color: color
+          color: this.visibleColor
         },
         type: 'scatter'
       }
