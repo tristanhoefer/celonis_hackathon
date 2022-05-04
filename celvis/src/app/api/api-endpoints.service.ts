@@ -57,8 +57,6 @@ export class ApiEndpointsService {
   }
 
   createPQLQueryBodyWithoutTable(query: string, limit: number | null = 400, offset: number = 0): any {
-    const limit_string: string = (limit) ? " LIMIT " + limit : "";
-    const offset_string: string = (offset) ? " OFFSET " + offset : "";
     return {
       "variables": [],
       "requests": [
@@ -80,7 +78,9 @@ export class ApiEndpointsService {
     }
   }
 
-  createInductiveMiner(tableName: string, columnName: string, threshold: number = 0.2) {
+  createInductiveMiner(tableName: string, columnName: string, query_filter?: string, threshold: number = 0.2) {
+    // FILTER CLUSTER_VARIANTS ( VARIANT ( \"BPI2017_APPLICATION_XES\".\"CONCEPT:NAME\" ) , 4475 , 2 ) = 0;INDUCTIVE_MINER (\"BPI2017_application_xes\".\"concept:name\", 0.2)
+    const query = "INDUCTIVE_MINER (\"" + tableName + "\".\"" + columnName + "\", " + threshold + ")"
     return {
       "variables": [],
       "requests": [
@@ -91,7 +91,7 @@ export class ApiEndpointsService {
               {
                 "computationId": 0,
                 "queries": [
-                  "INDUCTIVE_MINER (\"" + tableName + "\".\"" + columnName + "\", " + threshold + ")"
+                  query_filter + query
                 ]
               }
             ]

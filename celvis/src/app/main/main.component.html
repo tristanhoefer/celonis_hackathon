@@ -16,9 +16,26 @@
       </p-fieldset>
     </div>
 
-    <div class="single-card">
+    <div class="single-card" id="ref_size">
       <p-fieldset legend="Inductive Miner" [toggleable]="true" [collapsed]="true"
                   [class]="'new-card process-tree-wrapper'">
+        <div class="slider-wrapper">
+          <div class="range-slider-wrapper">
+            <div>
+              <p class="slider-header">Min Number of Activities: </p>
+              <input type="text" pInputText [(ngModel)]="number_of_activities_range[0]"/>
+            </div>
+            <div>
+              <p-selectButton [options]="tauOptions" [(ngModel)]="showTau" optionLabel="label" optionValue="value" (onChange)="updateMiner()"></p-selectButton>
+            </div>
+            <div>
+              <p class="slider-header">Max Number of Activities: </p>
+              <input type="text" pInputText [(ngModel)]="number_of_activities_range[1]"/>
+            </div>
+          </div>
+          <p-slider [(ngModel)]="number_of_activities_range" [min]="slider_min_value" [max]="slider_max_value" [range]="true"
+                    (onSlideEnd)="updateMiner()"></p-slider>
+        </div>
         <div class="card" id="processTree"></div>
       </p-fieldset>
     </div>

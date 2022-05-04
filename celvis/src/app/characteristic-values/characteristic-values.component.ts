@@ -85,9 +85,6 @@ export class CharacteristicValuesComponent implements OnInit {
     this.dataService.activityValSub.subscribe((data: any) => {
       this.allActivities = data;
     })
-    this.dataService.clusterSizeSub.subscribe((id: number) => {
-      this.clusterSize = id;
-    });
   }
 
 

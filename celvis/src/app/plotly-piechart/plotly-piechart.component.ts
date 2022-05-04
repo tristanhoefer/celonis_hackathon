@@ -22,6 +22,7 @@ export class PlotlyPiechartComponent implements OnInit {
 
   total_number_of_variants: number = 0;
 
+
   ngOnInit(): void {
     this.updatePieChart()
 
@@ -36,6 +37,7 @@ export class PlotlyPiechartComponent implements OnInit {
         this.values.push(d);
         this.total_number_of_variants += d;
       });
+      this.dataService.totalNumberOfVariantsSub.next(this.total_number_of_variants)
       this.updatePieChart();
     })
   }
@@ -62,6 +64,8 @@ export class PlotlyPiechartComponent implements OnInit {
       if(!data.points?.length || !data.points[0]?.label) return;
       this.dataService.setClickedId(data.points[0].label);
       this.dataService.setClusterSize(data.points[0].value);
+
+      console.log("Clicked on id: ", data.points[0].label);
     });
   }
 }

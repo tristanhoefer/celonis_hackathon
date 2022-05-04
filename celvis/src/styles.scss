@@ -92,8 +92,12 @@ html {
   //--color-strong-blue: #0778d0;
 }
 
-.p-slider .p-slider-range {
+.p-slider .p-slider-range, .p-selectbutton .p-button.p-highlight {
   background-color: var(--color-brand-primary);
+}
+
+.p-selectbutton .p-button.p-highlight:hover {
+  background-color: var(--color-brand-primary-hover);
 }
 
 .p-slider .p-slider-handle {

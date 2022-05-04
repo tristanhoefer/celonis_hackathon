@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ApiEndpointsService} from "./api-endpoints.service";
 import {ApiHttpService} from "./ApiHttpService";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, forkJoin, Observable} from "rxjs";
 import {AutoUnsubscribe} from "../utility/AutoUnsubscribe";
 
 declare var PetriNetVanillaVisualizer: any;
@@ -64,6 +64,10 @@ export class DataService {
 
 
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
+    window.addEventListener('resize', () => {
+      this.resizeSvg('petriNet');
+      this.resizeSvg('processTree');
+    }, true);
   }
 
 
@@ -72,13 +76,30 @@ export class DataService {
   public data_service_batch = (): string => this.apiEndpoint.createUrl('analysis/' + this.dataset_key + '/data_service_batch', false);
 
 
-  testMiner(selectedVar: any) {
+  testMiner(selectedVar: any, id?: any) {
     if (!selectedVar.isActivityColumn) return;
-    const body = this.apiEndpoint.createInductiveMiner(selectedVar.parentName, selectedVar.name);
+    const query_filter = (!id || isNaN(id)) ? "" : "FILTER " + this.getClusterQuery() + " = " + id + "; ";
+    const body = this.apiEndpoint.createInductiveMiner(selectedVar.parentName, selectedVar.name, query_filter);
 
-    this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
-      const vertex_properties = data.results[0].result.components[0].results[0];
-      const edge_properties = data.results[0].result.components[0].results[1];
+    const get_count_query = "variants_count as TABLE(VARIANT(\"" + selectedVar.parentName + "\".\"" + selectedVar.name + "\"),COUNT_TABLE(CASE_TABLE(\"" + selectedVar.parentName + "\".\"" + selectedVar.name + "\"))) ORDER BY COUNT_TABLE(CASE_TABLE(\"" + selectedVar.parentName + "\".\"" + selectedVar.name + "\")) DESC; GRAPH(REF_RESULT(variants_count, 0), REF_RESULT(variants_count, 1), \"" + selectedVar.parentName + "\".\"" + selectedVar.name + "\"); "
+    const secondBody = this.apiEndpoint.createPQLQueryBodyWithoutTable(get_count_query);
+
+
+    forkJoin([this.apiHttpService.post(this.data_service_batch(), body), this.apiHttpService.post(this.data_service_batch(), secondBody)]).subscribe((data: any) => {
+      // Create Threshold Map to check whether we meet the specified number of activities
+      let count_map: Map<string, number> = new Map();
+      let threshold_map: Map<string, boolean> = new Map();
+      let activitiy_count_threshold = 30000;
+      data[1].results[0].result.components[0].results[0].data.forEach((d: any) => {
+        const count = d[4];
+        count_map.set(d[0], count);
+        threshold_map.set(d[0], count > this.number_of_activities_range[0] && count < this.number_of_activities_range[1]);
+      });
+
+
+    // this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
+      const vertex_properties = data[0].results[0].result.components[0].results[0];
+      const edge_properties = data[0].results[0].result.components[0].results[1];
 
       const vertex_data = vertex_properties.data; // first entry is number from 0 to 5, second is label => ProcessTree
       const edge_data = edge_properties.data; // first entry is "from" node, second entry is "to" node
@@ -109,41 +130,66 @@ export class DataService {
         tmp_map.set(index, new ProcessTree(null, operator, value[1]));
       })
 
+      let empty_parent_redirect: Map<any, any> = new Map();
+
       edge_data.forEach((value: any, index: number) => {
+        const parent = tmp_map.get(value[0]);
         let test = tmp_map.get(value[1]);
-        test.parentNode = tmp_map.get(value[0]);
-        // console.log(test);
-        tmp_map.get(value[0]).children.push(test);
+        // Return if the Activity Threshold is not met!
+        if(test.label && !threshold_map.get(test.label)) return;
+        if(!this.showTau && test.operator === "tau") return; // Hide if we said to do so
+        if(!test.label && !test.operator) {
+          if(empty_parent_redirect.has(parent.id)) {
+            empty_parent_redirect.set(test.id, empty_parent_redirect.get(parent.id));
+          } else {
+            empty_parent_redirect.set(test.id, value[0]);
+          }
+          return;
+        }
+        if(empty_parent_redirect.has(parent.id)) {
+          test.parentNode = tmp_map.get(empty_parent_redirect.get(parent.id));
+          tmp_map.get(empty_parent_redirect.get(parent.id)).children.push(test);
+        } else {
+          test.parentNode = tmp_map.get(value[0]);
+          tmp_map.get(value[0]).children.push(test);
+        }
       });
 
       const final_tree = tmp_map.get(0);
       let processTree = ProcessTreeVanillaVisualizer.apply(final_tree);
       d3.select("#processTree").graphviz().renderDot(processTree, () => {
-        const svg = document.getElementById('processTree')?.getElementsByTagName("svg");
-        if (svg) {
-          const svg_array = Array.from(svg);
-          if (svg_array.length) {
-            const svg_elem = svg_array[0];
-            svg_elem.setAttribute("width", String((window.innerWidth - 120)));
-            svg_elem.setAttribute("height", "400");
-          }
-        }
+        this.resizeSvg('processTree');
       });
 
       let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(final_tree);
       let petriNet = PetriNetVanillaVisualizer.apply(acceptingPetriNet)
       d3.select('#petriNet').graphviz().renderDot(petriNet, () => {
-        const svg = document.getElementById('petriNet')?.getElementsByTagName("svg");
-        if (svg) {
-          const svg_array = Array.from(svg);
-          if (svg_array.length) {
-            const svg_elem = svg_array[0];
-            svg_elem.setAttribute("width", String((window.innerWidth - 120)));
-            svg_elem.setAttribute("height", "400");
-          }
-        }
+        this.resizeSvg('petriNet');
       });
     })
+  }
+
+  resizeSvg(id: string) {
+    const svg = document.getElementById(id)?.getElementsByTagName("svg");
+    if (svg) {
+      const svg_array = Array.from(svg);
+      const ref_elem = document.getElementById("ref_size");
+      if (svg_array.length && ref_elem) {
+        const svg_elem = svg_array[0];
+        const w = (ref_elem?.getBoundingClientRect().width || 1000) - 22 - 26;  //  -  Margins & Paddings
+        const h = ref_elem?.getBoundingClientRect().height || 600;
+        svg_elem.setAttribute("width", String(w));
+        svg_elem.setAttribute("height", String(h));
+      }
+    }
+  }
+
+
+  number_of_activities_range: number[] = [0, 10000000];
+  showTau: boolean = false;
+
+  updateMiner() {
+    this.testMiner(this.selectedVariant, (this.clickedId > -3) ? this.clickedId : null);
   }
 
   tableClusters: string = ""
@@ -164,8 +210,7 @@ export class DataService {
     this.columnClusterName = columnName;
     this.minPts = minPts;
     this.epsilon = epsilon;
-    const query = "CLUSTER_VARIANTS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + minPts + ", " + epsilon + ") \nAS \"New Expression\"\n";
-    const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
+    const body = this.apiEndpoint.createPQLQueryBody(this.getClusterQuery(), this.LIMIT);
 
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
@@ -184,9 +229,12 @@ export class DataService {
     })
   }
 
+  getClusterQuery() {
+    return "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\"), " + this.minPts + ", " + this.epsilon + ") \nAS \"Cluster\"\n";
+  }
+
   getVariant(variantName: string) {
-    const cluster_query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\"), " + this.minPts + ", " + this.epsilon + ") \nAS \"Cluster\"\n";
-    const query = "MATCH_ACTIVITIES(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\", NODE [\'" + variantName + "\'] ), " + cluster_query;
+    const query = "MATCH_ACTIVITIES(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\", NODE [\'" + variantName + "\'] ), " + this.getClusterQuery();
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
@@ -197,8 +245,7 @@ export class DataService {
   }
 
   getDistinctActivities(tableName: string, columnName: string) {
-    const cluster_query = "CLUSTER_VARIANTS ( VARIANT(\"" + this.tableClusters + "\".\"" + this.columnClusterName + "\"), " + this.minPts + ", " + this.epsilon + ") \nAS \"Cluster\"\n";
-    const query = "DISTINCT \"" + tableName + "\".\"" + columnName + "\", " + cluster_query;
+    const query = "DISTINCT \"" + tableName + "\".\"" + columnName + "\", " + this.getClusterQuery();
     const body = this.apiEndpoint.createPQLQueryBody(query, this.LIMIT);
     this.apiHttpService.post(this.data_service_batch(), body).subscribe((data: any) => {
       if (!data?.results?.length || !data.results[0]?.result?.components[0]?.results?.length) return;
@@ -211,6 +258,7 @@ export class DataService {
   clusterInformalData: any[] = [];
   clusterInformalDataSub: BehaviorSubject<any> = new BehaviorSubject([]);
 
+  totalNumberOfVariantsSub: BehaviorSubject<any> = new BehaviorSubject(-5);
 
   getClustersEstimates(tableName: string, columnName: string, epsilon: number = 2, numberOfValues: number = 100, recursion_depth: number = 5) {
     const query = "ESTIMATE_CLUSTER_PARAMS ( VARIANT(\"" + tableName + "\".\"" + columnName + "\"), " + epsilon + ", " + numberOfValues + ", " + recursion_depth + ") \nAS \"New Expression\"\n"
@@ -364,9 +412,16 @@ export class DataService {
 
 
   clickedIdSub: BehaviorSubject<any> = new BehaviorSubject(-5);
+  clickedId: number = -5;
+  selectedVariant: any = {};
+
 
   setClickedId(id: number) {
     this.clickedIdSub.next(id)
+    this.clickedId = id;
+
+    // Update Miner...
+    this.testMiner(this.selectedVariant, id);
   }
 
 

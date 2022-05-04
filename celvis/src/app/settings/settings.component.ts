@@ -90,6 +90,7 @@ export class SettingsComponent implements OnInit {
 
   updateColumnSelection(event: any) {
     this.selectedVariant = event.value;    // Get correct Clusters Data
+    this.dataService.selectedVariant = event.value;
     // this.dataService.getClusters(this.selectedVariant.parentName, this.selectedVariant.name, this.min_pts_val);
     this.dataService.testMiner(this.selectedVariant);
     this.dataService.getClustersEstimates(this.selectedVariant.parentName, this.selectedVariant.name);

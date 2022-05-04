@@ -25,6 +25,8 @@ import {FieldsetModule} from "primeng/fieldset";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {DropdownModule} from 'primeng/dropdown';
 import {TableModule} from "primeng/table";
+import {SelectButtonModule} from "primeng/selectbutton";
+import {ToggleButtonModule} from "primeng/togglebutton";
 
 
 @NgModule({
@@ -37,22 +39,24 @@ import {TableModule} from "primeng/table";
     PlotlyPiechartComponent,
     CharacteristicValuesComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        ListboxModule,
-        CascadeSelectModule,
-        FormsModule,
-        SliderModule,
-        InputTextModule,
-        MultiSelectModule,
-        FieldsetModule,
-        ProgressSpinnerModule,
-        DropdownModule,
-        TableModule
-    ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ListboxModule,
+    CascadeSelectModule,
+    FormsModule,
+    SliderModule,
+    InputTextModule,
+    MultiSelectModule,
+    FieldsetModule,
+    ProgressSpinnerModule,
+    DropdownModule,
+    TableModule,
+    SelectButtonModule,
+    ToggleButtonModule
+  ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]
 })

@@ -85,6 +85,13 @@
   }
 }
 
+.range-slider-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 .color-test1, .color-test2, .color-test3 {
   padding: .5rem 1rem;
