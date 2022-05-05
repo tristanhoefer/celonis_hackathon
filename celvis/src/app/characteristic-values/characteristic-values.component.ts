@@ -36,12 +36,16 @@ export class CharacteristicValuesComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.clickedIdSub.subscribe((id: number) => {
-      this.loading = true;
       this.clickedId = id;
+      if(this.clickedId < -4) return;
+      this.loading = true;
 
       this.activities = this.allActivities.filter((d: any) => d[1] == this.clickedId);
       this.activities = this.activities.map((d: any) => { return { "name": d[0]}});
-      this.selectedActivity = this.activities[0];
+      if(!this.selectedActivity || !this.activities.filter((e: any) => e.name === this.selectedActivity.name).length) {
+        // Update the Activity (otherwise, keep it)
+        this.selectedActivity = this.activities[0];
+      }
       this.loadVariantProperties();
 
 

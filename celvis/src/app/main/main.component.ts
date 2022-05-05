@@ -51,4 +51,11 @@ export class MainComponent implements OnInit {
     this.dataService.showTau = this.showTau;
     this.dataService.updateMiner();
   }
+
+  triggerSvgResize() {
+    setTimeout(() => {
+      this.dataService.resizeSvg('petriNet');
+      this.dataService.resizeSvg('processTree', 'slider-wrapper');
+    }, 250);
+  }
 }

@@ -66,7 +66,7 @@ export class DataService {
   constructor(private apiEndpoint: ApiEndpointsService, private apiHttpService: ApiHttpService) {
     window.addEventListener('resize', () => {
       this.resizeSvg('petriNet');
-      this.resizeSvg('processTree');
+      this.resizeSvg('processTree', 'slider-wrapper');
     }, true);
   }
 
@@ -158,7 +158,7 @@ export class DataService {
       const final_tree = tmp_map.get(0);
       let processTree = ProcessTreeVanillaVisualizer.apply(final_tree);
       d3.select("#processTree").graphviz().renderDot(processTree, () => {
-        this.resizeSvg('processTree');
+        this.resizeSvg('processTree', 'slider-wrapper');
       });
 
       let acceptingPetriNet = ProcessTreeToPetriNetConverter.apply(final_tree);
@@ -169,15 +169,18 @@ export class DataService {
     })
   }
 
-  resizeSvg(id: string) {
+  resizeSvg(id: string, marginId?: string) {
     const svg = document.getElementById(id)?.getElementsByTagName("svg");
     if (svg) {
       const svg_array = Array.from(svg);
       const ref_elem = document.getElementById("ref_size");
+      const margin = ((marginId) ? document.getElementById(marginId)?.getBoundingClientRect().height : 0) || 0;
       if (svg_array.length && ref_elem) {
         const svg_elem = svg_array[0];
-        const w = (ref_elem?.getBoundingClientRect().width || 1000) - 22 - 26;  //  -  Margins & Paddings
-        const h = ref_elem?.getBoundingClientRect().height || 600;
+        const w_margin = 22 + 26
+        const h_margin = 70;
+        const w = (ref_elem?.getBoundingClientRect().width || 1000) - w_margin;
+        const h = Math.max((ref_elem?.getBoundingClientRect().height || 600) - margin - h_margin, 0);
         svg_elem.setAttribute("width", String(w));
         svg_elem.setAttribute("height", String(h));
       }
@@ -422,6 +425,12 @@ export class DataService {
 
     // Update Miner...
     this.testMiner(this.selectedVariant, id);
+  }
+
+  resetClickedId() {
+    this.clickedIdSub.next(-5);
+    this.clickedId = -5;
+    this.testMiner(this.selectedVariant)
   }
 
 

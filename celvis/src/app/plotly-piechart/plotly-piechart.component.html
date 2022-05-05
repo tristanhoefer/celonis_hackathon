@@ -1,2 +1,10 @@
-<h5 style="display: inline-block">Total Number of Variants:</h5> <h5 class="color">{{total_number_of_variants}}</h5>
+<div class="varSelection">
+  <div>
+    <h5 style="display: inline-block; margin: 0">Total Number of Variants:</h5> <h5
+    class="color">{{total_number_of_variants}}</h5>
+  </div>
+  <button pButton pRipple type="button"
+          label="Reset Case Selection"
+          class="p-button-outlined" (click)="resetSelection()"></button>
+</div>
 <div id="myDiv1"></div>

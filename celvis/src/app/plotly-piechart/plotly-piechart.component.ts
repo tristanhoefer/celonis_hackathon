@@ -40,7 +40,13 @@ export class PlotlyPiechartComponent implements OnInit {
       this.dataService.totalNumberOfVariantsSub.next(this.total_number_of_variants)
       this.updatePieChart();
     })
+
+    this.dataService.clickedIdSub.subscribe((id: number) => {
+      this.clickedId = id;
+    })
   }
+
+  clickedId: number = -5;
 
 
   updatePieChart() {
@@ -64,8 +70,11 @@ export class PlotlyPiechartComponent implements OnInit {
       if(!data.points?.length || !data.points[0]?.label) return;
       this.dataService.setClickedId(data.points[0].label);
       this.dataService.setClusterSize(data.points[0].value);
-
-      console.log("Clicked on id: ", data.points[0].label);
     });
+  }
+
+
+  resetSelection() {
+    this.dataService.resetClickedId();
   }
 }

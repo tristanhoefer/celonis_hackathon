@@ -27,6 +27,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {TableModule} from "primeng/table";
 import {SelectButtonModule} from "primeng/selectbutton";
 import {ToggleButtonModule} from "primeng/togglebutton";
+import {ButtonModule} from "primeng/button";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import {ToggleButtonModule} from "primeng/togglebutton";
     DropdownModule,
     TableModule,
     SelectButtonModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    ButtonModule
   ],
   providers: [ApiHttpService, ApiEndpointsService, Constants, DataService],
   bootstrap: [AppComponent]

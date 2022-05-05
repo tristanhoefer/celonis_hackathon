@@ -1,9 +1,16 @@
 .color {
-  margin-left: 1rem;
+  margin: 0 0 0 1rem;
   display: inline-block;
   color: var(--color-brand-primary);
 }
 
+.varSelection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
 ::ng-deep .pieplotbox {
   .pielayer {

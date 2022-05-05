@@ -18,8 +18,8 @@
 
     <div class="single-card" id="ref_size">
       <p-fieldset legend="Inductive Miner" [toggleable]="true" [collapsed]="true"
-                  [class]="'new-card process-tree-wrapper'">
-        <div class="slider-wrapper">
+                  [class]="'new-card process-tree-wrapper'" (onAfterToggle)="triggerSvgResize()">
+        <div class="slider-wrapper" id="slider-wrapper">
           <div class="range-slider-wrapper">
             <div>
               <p class="slider-header">Min Number of Activities: </p>
@@ -41,7 +41,8 @@
     </div>
 
     <div class="single-card">
-      <p-fieldset legend="Petri Net" [toggleable]="true" [collapsed]="true" [class]="'new-card process-tree-wrapper'">
+      <p-fieldset legend="Petri Net" [toggleable]="true" [collapsed]="true"
+                  [class]="'new-card process-tree-wrapper'"  (onAfterToggle)="triggerSvgResize()">
         <div class="card" id="petriNet"></div>
       </p-fieldset>
     </div>
